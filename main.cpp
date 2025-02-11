@@ -25,6 +25,22 @@ void add(Storage& s, const El& d){
 	++s.size;
 }
 
+template <typename Storage, typename El>
+void remove(Storage& s, size_t num) {
+	
+	El* newStorage = new El[s.size - 1];
+	// Копируем имеющееся содержимое 
+	for (size_t k = 0; k < num; ++k)
+		newStorage[k] = s.storage[k];
+	for (size_t k = num+1; k < ds.size; ++k)
+		newStorage[k-1] = s.storage[k];
+		
+	delete[] s.storage;
+	s.storage = newStorage;
+	--s.size;
+}
+
+
 bool testAddDot(){
 	dotStorage ds{nullptr, 0};
 	dot d1{1.4,2.5};
