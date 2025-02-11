@@ -32,7 +32,7 @@ void remove(Storage& s, size_t num) {
 	// Копируем имеющееся содержимое 
 	for (size_t k = 0; k < num; ++k)
 		newStorage[k] = s.storage[k];
-	for (size_t k = num+1; k < ds.size; ++k)
+	for (size_t k = num+1; k < s.size; ++k)
 		newStorage[k-1] = s.storage[k];
 		
 	delete[] s.storage;
@@ -75,5 +75,3 @@ int main(){
 	std::cout << "testAddSegment" << (testAddSegment() ? "OK":"No") << std::endl;
 	return 0;
 }
-
-
