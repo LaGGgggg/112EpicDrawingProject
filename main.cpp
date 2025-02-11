@@ -11,7 +11,7 @@ struct segment{
 struct dotStorage{
 	dot* storage;
 	size_t size;
-}
+};
 
 
 void add( dotStorage& ds, const dot& d){
