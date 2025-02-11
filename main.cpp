@@ -26,7 +26,7 @@ void add( dotStorage& ds, const dot& d){
 }
 
 bool testAddDot(){
-	dotStorage ds;
+	dotStorage ds{nullptr, 0};
 	dot d1{1.4,2.5};
 	add(ds,d1);
 
