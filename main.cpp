@@ -13,16 +13,16 @@ struct dotStorage{
 	size_t size;
 };
 
-
-void add( dotStorage& ds, const dot& d){
-	dot* newStorage = new dot[ds.size+1];
+template <typename Storage, typename El>
+void add(Storage& s, const El& d){
+	El* newStorage = new El[s.size+1];
 	// Копируем имеющееся содержимое 
-	for (size_t k = 0; k < ds.size ;++k)
-		newStorage[k] = ds.storage[k];
-	newStorage[ds.size] = d;
-	delete[] ds.storage;
-	ds.storage = newStorage;
-	++ds.size;
+	for (size_t k = 0; k < s.size ;++k)
+		newStorage[k] = s.storage[k];
+	newStorage[s.size] = d;
+	delete[] s.storage;
+	s.storage = newStorage;
+	++s.size;
 }
 
 bool testAddDot(){
@@ -37,18 +37,26 @@ bool testAddDot(){
 	return true;
 }
 
-
-
-
-
-
 struct segmentStorage{
 	segment* storage;
 	size_t size;
 };
 
+bool testAddSegment(){
+	segmentStorage ss{nullptr, 0};
+	segment s1{{1.4, 2.5}, {2.4, 3.5}};
+	add(ss,s1);
+
+	if (ss.size != 1) return false;
+	if ( ss.storage[0].start.x != s1.start.x || ss.storage[0].start.y != s1.start.y ) return false;
+	if ( ss.storage[0].end.x != s1.end.x || ss.storage[0].end.y != s1.end.y ) return false;
+
+	return true;
+}
+
 int main(){
 	std::cout << "testAddDot " << (testAddDot() ? "OK":"No") << std::endl;
+	std::cout << "testAddSegment" << (testAddSegment() ? "OK":"No") << std::endl;
 	return 0;
 }
 
