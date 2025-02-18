@@ -5,49 +5,51 @@
 #include "segment.h"
 #include <cassert>
 #include <cstddef>
-#include <cassert>
 
-template<typename El> class Storage {
+template<typename El>
+class Storage {
 public:
-	Storage() {
+  Storage() : m_storage(nullptr), m_size(0) {}
 
-	}
-	void add(const El& d) {
-		El* newStorage = new El[m_size + 1];
-		// Копируем имеющееся содержимое 
-		for (size_t k = 0; k < m_size; ++k)
-			newStorage[k] = m_storage[k];
-		newStorage[m_size] = d;
-		delete[] m_storage;
-		m_storage = newStorage;
-		++m_size;
-	}
+  void add(const El& d) {
+    El* newStorage = new El[m_size + 1];
+    for (size_t k = 0; k < m_size; ++k)
+      newStorage[k] = m_storage[k];
+    newStorage[m_size] = d;
+    delete[] m_storage;
+    m_storage = newStorage;
+    ++m_size;
+  }
+
+  void remove(size_t num) {
+    assert(num < m_size);
+  
+    El* newStorage = new El[m_size - 1];
+    // Копируем имеющееся содержимое 
+    for (size_t k = 0; k < num; ++k)
+      newStorage[k] = m_storage[k];
+    for (size_t k = num + 1; k < m_size; ++k)
+      newStorage[k - 1] = m_storage[k];
+      
+    delete[] m_storage;
+    m_storage = newStorage;
+    --m_size;
+  }
+
+  size_t size() const {
+    return m_size;
+  }
+
+  El* storage() const {
+    return m_storage;
+  }
+
 private:
-	El* m_storage;
-	size_t m_size;
+  El* m_storage;
+  size_t m_size;
 };
 
-template <typename Storage, typename El>
-void remove(Storage& s, size_t num) {
-	assert(num < s.size);
-	/*if (num > s.size + 1) 
-		throw std::out_of_range("Incorrect index");	
-		*/
-
-	El* newStorage = new El[s.size - 1];
-	// Копируем имеющееся содержимое 
-	for (size_t k = 0; k < num; ++k)
-		newStorage[k] = s.storage[k];
-	for (size_t k = num+1; k < s.size; ++k)
-		newStorage[k-1] = s.storage[k];
-		
-	delete[] s.storage;
-	s.storage = newStorage;
-	--s.size;
-}
-
-
-dotStorage createTestDotStorage();
+Storage<dot> createTestDotStorage();
 
 bool testAddDot();
 bool testAddSegment();

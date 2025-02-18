@@ -1,18 +1,18 @@
 #include <iostream>
 #include <cassert>
-#include "baseCore.h"
+//#include "baseCore.h"
 #include "storage.h"
 
 
 class Base{
 public:
-
-
+	
+	
 private:
 	Storage<dot> m_dotStorage;
 	Storage<segment> m_segmentStorage;
-
-
+	
+	
 };
 
 
@@ -33,5 +33,9 @@ int main() {
 	dotStorage.add(d);
 	
 	segmentStorage.add(s);
+	
+	std::cout << "testAddDot " << (testAddDot() ? "OK" : "No") << std::endl;
+	std::cout << "testAddSegment " << (testAddSegment() ? "OK" : "No") << std::endl;
+	std::cout << "testRemove " << (testRemove() ? "OK" : "No") << std::endl;
 	return 0;
 }
