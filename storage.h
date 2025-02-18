@@ -9,7 +9,7 @@
 
 template<typename El> class Storage {
 public:
-	Storage() {
+	Storage() m_storage(nullptr), m_size(0) {
 
 	}
 	void add(const El& d) {
