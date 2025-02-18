@@ -22,6 +22,14 @@ public:
 		m_storage = newStorage;
 		++m_size;
 	}
+
+El getElementPosition (int pos) {
+	if (pos < m_size && pos >= 0) {
+		return m_storage[pos];
+	}
+	throw "invalid position";
+}
+
 private:
 	El* m_storage;
 	size_t m_size;
