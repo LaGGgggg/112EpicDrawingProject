@@ -9,6 +9,7 @@
 template<typename El>
 class Storage {
 public:
+<<<<<<< HEAD
   Storage() : m_storage(nullptr), m_size(0) {}
 
   void add(const El& d) {
@@ -44,6 +45,29 @@ public:
     return m_storage;
   }
 
+=======
+	Storage() m_storage(nullptr), m_size(0) {
+
+	}
+	void add(const El& d) {
+		El* newStorage = new El[m_size + 1];
+		// Копируем имеющееся содержимое 
+		for (size_t k = 0; k < m_size; ++k)
+			newStorage[k] = m_storage[k];
+		newStorage[m_size] = d;
+		delete[] m_storage;
+		m_storage = newStorage;
+		++m_size;
+	}
+
+El getElementPosition (int pos) {
+	if (pos < m_size && pos >= 0) {
+		return m_storage[pos];
+	}
+	throw "invalid position";
+}
+
+>>>>>>> 0dbcbfd1697110fc360fbe7ab1998642d87635e5
 private:
   El* m_storage;
   size_t m_size;
