@@ -1,15 +1,20 @@
-XXXXX: main.o bitmap.o idgenerator.o 
-	mingw32-g++ main.o bitmap.o idgenerator.o -o XXXXX.exe
+CXX=mingw32-g++
+INCLUDEDIR=include
+SOURCEFILES=src\main.cpp src\bitmap.cpp src\idgenerator.cpp
+OBJFILES=$(SOURCEFILES:.cpp=.o ) 
 
-main.o: main.cpp
-	mingw32-g++ -c main.cpp
 
-bitmap.o: bitmap.cpp
-	mingw32-g++ -c bitmap.cpp
 
-idgenerator.o: idgenerator.cpp
-	mingw32-g++ -c idgenerator.cpp
+
+XXXXX: $(OBJFILES)
+	$(CXX) $(OBJFILES) -o XXXXX.exe
+
+$(OBJFILES):  $(SOURCEFILES)
+
+.cpp.o:
+	$(CXX) -I $(INCLUDEDIR) -c $< -o $@
+
 	
 clean:
-	del main.o bitmap.o idgenerator.o 
+	del $(OBJFILES) 
 	del XXXXX.exe
