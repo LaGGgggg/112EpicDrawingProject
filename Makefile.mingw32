@@ -12,4 +12,4 @@ idgenerator.o: idgenerator.cpp
 	
 clean:
 	del main.o bitmap.o idgenerator.o 
-	del XXXX.exe
+	del XXXXX.exe
