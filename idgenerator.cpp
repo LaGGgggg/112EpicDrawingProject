@@ -1,6 +1,6 @@
 #include "idgenerator.h"
 
-ID lastGivenId;
+ID lastGivenId = 0;
 
 ID generateID(){
 	return ++lastGivenId;
