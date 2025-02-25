@@ -1,0 +1,15 @@
+XXXXX: main.o bitmap.o idgenerator.o 
+	mingw32-g++ main.o bitmap.o idgenerator.o -o XXXXX.exe
+
+main.o: main.cpp
+	mingw32-g++ -c main.cpp
+
+bitmap.o: bitmap.cpp
+	mingw32-g++ -c bitmap.cpp
+
+idgenerator.o: idgenerator.cpp
+	mingw32-g++ -c idgenerator.cpp
+	
+clean:
+	del main.o bitmap.o idgenerator.o 
+	del XXXX.exe
