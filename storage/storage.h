@@ -1,8 +1,8 @@
 #ifndef STORAGE_H
 #define STORAGE_H
 
-#include "dot.h"
-#include "segment.h"
+#include "../objects/dot.h"
+#include "../objects/segment.h"
 #include <cassert>
 #include <cstddef>
 
@@ -51,15 +51,20 @@ public:
         throw "invalid position";
     }
 
+    /*
+    El* findElementByID(ID id) {
+        for (size_t i = 0; i < m_size; ++i) {
+            if (m_storage[i].getID() == id) {
+                return &m_storage[i];
+            }
+        }
+        return nullptr;
+    }
+    */
+
 private:
     El* m_storage;
     size_t m_size;
 };
-
-Storage<dot> createTestDotStorage();
-
-bool testAddDot();
-bool testAddSegment();
-bool testRemove();
 
 #endif // STORAGE_H

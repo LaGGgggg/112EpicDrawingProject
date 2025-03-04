@@ -7,4 +7,5 @@ add_executable(112EpicDrawingProject main.cpp
         segment.h
         storage.h
         storage.cpp
-        dot.h)
+        dot.h
+        tests.cpp)

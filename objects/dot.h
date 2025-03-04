@@ -1,6 +1,6 @@
 #ifndef DOT_H
 #define DOT_H
-#include "idgenerator.h"
+#include "../ID/idgenerator.h"
 
 class  dot {
 public:
@@ -9,6 +9,7 @@ public:
 	}
 	double getx()const { return m_x; }
 	double gety()const { return m_y; }
+	ID getID() const { return m_id; }
 private:
 	ID m_id;
 	double m_x, m_y;

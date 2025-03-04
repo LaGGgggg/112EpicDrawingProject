@@ -2,7 +2,7 @@
 #define SEGMENT_H
 
 #include "dot.h"
-#include "idgenerator.h"
+#include "../ID/idgenerator.h"
 
 class segment {
 public:
@@ -11,6 +11,7 @@ public:
 	}
 	dot getStart() const {return m_start;}
 	dot getEnd() const {return m_end;}
+	ID getID() const { return m_id; }
 private:
 	ID m_id;
 	dot m_start;
