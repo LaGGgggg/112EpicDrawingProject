@@ -40,22 +40,28 @@ bool isFree(int x, int y, const BitMap&bm) {
 }
 
 // Отрисовка линии в BitMap файле
-void BitMap::drawSegment(int x1, int y1, int x2, int y2, bool isBlack) {
+    uint32_t diff_x, diff_y;
+    if (x1 <= x2) {
+         diff_x = x2 - x1;
+         diff_y = y2 - y1;
+    }
+    else {
+        diff_x = x1 - x2;
+        diff_y = y1 - y2;
+    }
 
-    int diff_x = abs(x2 - x1);
-    int diff_y = abs(y2 - y1);
+    uint32_t sign_x = x1 < x2 ? 1 : -1;
+    uint32_t sign_y = y1 < y2 ? 1 : -1;
 
-    int sign_x = x1 < x2 ? 1 : -1;
-    int sign_y = y1 < y2 ? 1 : -1;
-
-    int error = diff_x - diff_y;
+    uint32_t error = diff_x - diff_y;
 
     setPixel(x2, y2, isBlack);
 
     while (x1 != x2 || y1 != y2)
     {
         setPixel(x1, y1, isBlack);
-        int error2 = error * 2;
+
+        uint32_t error2 = error * 2;
         if (error2 > -diff_y)
         {
             error -= diff_y;
