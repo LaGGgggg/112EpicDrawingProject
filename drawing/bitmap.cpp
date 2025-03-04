@@ -1,6 +1,7 @@
 #include <fstream>
 #include <iostream>
 #include "bitmap.h"
+#include <cmath>
 
 bool loadBitMap(const char* filename, BitMap&bm) {
 	std::fstream fs;
@@ -31,8 +32,39 @@ bool loadBitMap(const char* filename, BitMap&bm) {
 	fs.read(reinterpret_cast<char*>(bm.data), bytes_in_row*bm.rows);
 }
 
+
 bool isFree(int x, int y, const BitMap&bm) {
 	if (x < 0 || x >= bm.cols || y < 0 || y >= bm.rows)
 		return false;
 
+}
+
+// Отрисовка линии в BitMap файле
+void BitMap::drawSegment(int x1, int y1, int x2, int y2, bool isBlack) {
+
+    int diff_x = abs(x2 - x1);
+    int diff_y = abs(y2 - y1);
+
+    int sign_x = x1 < x2 ? 1 : -1;
+    int sign_y = y1 < y2 ? 1 : -1;
+
+    int error = diff_x - diff_y;
+
+    setPixel(x2, y2, isBlack);
+
+    while (x1 != x2 || y1 != y2)
+    {
+        setPixel(x1, y1, isBlack);
+        int error2 = error * 2;
+        if (error2 > -diff_y)
+        {
+            error -= diff_y;
+            x1 -= sign_x;
+        }
+        if (error2 < diff_x)
+        {
+            error += sign_x;
+            y1 -= sign_y;
+        }
+    }
 }
