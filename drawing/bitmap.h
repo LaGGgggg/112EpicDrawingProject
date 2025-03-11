@@ -4,8 +4,9 @@
 class BitMap{
 public:
 	BitMap(uint32_t rows,uint32_t cols): rows(rows), cols(cols) {
-		data = new int[rows * cols];
-		std::fill(data, data + (rows * cols), 0);
+		size_t rowsize = cols / 32 + (cols%32? 1 : 0);
+		data = new uint32_t[(rows * rowsize)];
+		std::fill(data, data + (rows * rowsize), 0);
 	}
 	void saveTo(const char* filename);
 	void loadFrom(const char* filename);
