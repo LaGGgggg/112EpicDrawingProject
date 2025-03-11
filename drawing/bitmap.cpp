@@ -32,22 +32,15 @@ bool loadBitMap(const char* filename, BitMap&bm) {
 	fs.read(reinterpret_cast<char*>(bm.data), bytes_in_row*bm.rows);
 }
 
-
-bool isFree(int x, int y, const BitMap&bm) {
-	if (x < 0 || x >= bm.cols || y < 0 || y >= bm.rows)
-		return false;
-    return true;
-}
-
-void BitMap::setPixel(uint32_t x,uint32_t y,bool isBlack){
-    if(!isFree(x,y,this)){
-        return;
+void BitMap::setPixel(uint32_t x, uint32_t y, bool isBlack){
+    if (x < 0 || x >= cols || y < 0 || y >= rows) {
+        return false;
     }
     data[y*cols + x] = isBlack? 1: 0;
 }
 
 bool BitMap::isBlack(uint32_t x,uint32_t y){
-    if(!isFree(x,y,this)){
+    if (x < 0 || x >= cols || y < 0 || y >= rows) {
         return false;
     }
     return data[y * cols + x] == 1;
