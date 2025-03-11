@@ -3,7 +3,7 @@
 #include "bitmap.h"
 #include <cmath>
 
-bool loadBitMap(const char* filename, BitMap&bm) {
+bool loadBitMap(const char* filename) {
 	std::fstream fs;
 	fs.open(filename, std::ios_base::in | std::ios_base::binary);
 	if (!fs.is_open())
@@ -36,14 +36,22 @@ void BitMap::setPixel(uint32_t x, uint32_t y, bool isBlack){
     if (x < 0 || x >= cols || y < 0 || y >= rows) {
         return false;
     }
-    data[y*cols + x] = isBlack? 1: 0;
+    size_t rowsize = cols / 32 + (cols%32? 1 : 0);
+    uint32_t* row = data + y * rowsize;
+    if(isBlack){
+        row[x/32] |= (1 << (x % 32));
+    } else{
+        row[x/32] &= ~(1 << (x%32));
+    }
 }
 
 bool BitMap::isBlack(uint32_t x,uint32_t y){
     if (x < 0 || x >= cols || y < 0 || y >= rows) {
         return false;
     }
-    return data[y * cols + x] == 1;
+    size_t rowsize = cols / 32 + (cols%32? 1 : 0);
+    uint32_t* row = data + y * rowsize;
+    return (row[x/32] & (1 << (x % 32))) != 0;
 }
 
 // Отрисовка линии в BitMap файле
