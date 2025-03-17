@@ -12,8 +12,6 @@ add_executable(112EpicDrawingProject main.cpp
     objects/dot.h
     objects/segment.h
     storage/storage.cpp
-    storage/storage.h
-    tests/tests.cpp
-    tests/tests.h)
+    storage/storage.h)
 
-    include_directories(ID drawing objects storage tests)
+    include_directories(ID drawing objects storage)
