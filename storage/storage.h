@@ -62,6 +62,10 @@ public:
     }
     */
 
+    ~Storage() {
+        delete[] m_storage;
+    }
+
 private:
     El* m_storage;
     size_t m_size;
