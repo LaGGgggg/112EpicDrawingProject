@@ -21,8 +21,4 @@ private:
 	uint32_t rows;
 	uint32_t cols;
 	uint32_t* data;
-<<<<<<< HEAD
 };
-=======
-};
->>>>>>> 31ec9573edfac07cc2501fa75818e6a684a064b8
