@@ -3,10 +3,7 @@
 #include "bitmap.h"
 #include <cmath>
 
-<<<<<<< HEAD
 /*
-=======
->>>>>>> 31ec9573edfac07cc2501fa75818e6a684a064b8
 bool loadBitMap(const char* filename) {
 	std::fstream fs;
 	fs.open(filename, std::ios_base::in | std::ios_base::binary);
@@ -39,22 +36,14 @@ bool loadBitMap(const char* filename) {
 
 void BitMap::setPixel(uint32_t x, uint32_t y, bool isBlack){
     if (x < 0 || x >= cols || y < 0 || y >= rows) {
-<<<<<<< HEAD
         return;
-=======
-        return false;
->>>>>>> 31ec9573edfac07cc2501fa75818e6a684a064b8
     }
     size_t rowsize = cols / 32 + (cols%32? 1 : 0);
     uint32_t* row = data + y * rowsize;
     if(isBlack){
         row[x/32] |= (1 << (x % 32));
     } else{
-<<<<<<< HEAD
         row[x/32] &= ~(1 << (x % 32));
-=======
-        row[x/32] &= ~(1 << (x%32));
->>>>>>> 31ec9573edfac07cc2501fa75818e6a684a064b8
     }
 }
 
