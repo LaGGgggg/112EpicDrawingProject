@@ -57,7 +57,7 @@ bool BitMap::isBlack(uint32_t x,uint32_t y){
 }
 
 // Отрисовка линии в BitMap файле
-void BitMap::drawSegment(int x1, int y1, int x2, int y2, bool isBlack) {
+void BitMap::drawSegment(uint32_t x1, uint32_t y1, uint32_t x2, uint32_t y2, bool isBlack) {
     uint32_t diff_x, diff_y;
     if (x1 <= x2) {
          diff_x = x2 - x1;
