@@ -40,10 +40,6 @@ public:
         return m_size;
     }
 
-    El* storage() const {
-        return m_storage;
-    }
-
     El getElementPosition(int pos) {
         if (pos < m_size && pos >= 0) {
             return m_storage[pos];
