@@ -1,58 +1,94 @@
 #include <iostream>
 #include <cassert>
-//#include "baseCore.h"
-#include "storage/storage.h"
-#include "tests/tests.h"
+
+#include "storage.h"
+#include "dot.h"
+#include "segment.h"
+#include "idgenerator.h"
+
+enum ObjType {
+	OBJ_DOT,
+	OBJ_SEG
+};
+
+enum RelativePosType {
+	
+	EQUAL_LENGTH_SEGMENTS, // Отрезки должны быть одинаковы по длине
+	ORTHO_SEGMENTS, // Отрезки должны быть ортогональны
+
+};
+
+enum SRPResult {
+	ALL_OK = 0,
+	INVALID_OBJECTS,
+	INVALID_RELPOS
+};
 
 
 class Base{
 public:
-	//не могу оттестировать методы, но поидее как-то так
-	/*
-	ID addDot(double x, double y) {
-		dot d(x, y);
-		m_dotStorage.add(d);
-		return d.getID();
-	}
+	ID addObject(ObjType otype) {
+		switch (otype) {
+		case OBJ_DOT:
+			m_dotStorage.add(dot());
+			return m_dotStorage.getElementPosition(m_dotStorage.size() - 1).getID();
+			break;
+		case OBJ_SEG:
 
-	//Если мы хотим добавлять отрезок по id точек (просто не помню что мы решили по добавлению отрезков)
-	ID addSegment(ID startID, ID endID) {
-		dot* start = m_dotStorage.findElementByID(startID);
-		dot* end = m_dotStorage.findElementByID(endID);
-		
-		if (!start || !end) {
-			return -1;
+			break;
 		}
+	};
 
-		segment s(*start, *end);
-		m_segmentStorage.add(s);
-		return s.getID();
+	SRPResult setRelativePos(Storage<ID>& objects, RelativePosType rpt) {
+		// Проверка на корректность пожеланий пользователя
+		
+		const double errorThreshold = 1e-6;
+
+		while ( getError( objects, rpt) > errorThreshold )  /* Условие необходимости продолжения процедуры поиска значений параметров*/ {
+
+			// Выбираем как изменить параметры объектов 
+			// (для этого надо уметь вычислять частные производные 
+			// от величины ошибки)
+
+			// Меняем параметры 
+			// (для этого надо реализовать методы, 
+			// модифицирующие положение точек и отрезков)
+			// Оцениваем как изменилась ситуации с точки зрения 
+			// выполнения пожеланий пользователя
+		}		
 	}
-	*/
+
+	double getError(Storage<ID>& objects, RelativePosType rpt);
+
+	
+	int getObjParams(ID id, Storage<double>& params) {
+		for (size_t k = 0; k < m_dotStorage.size(); ++k) {
+			if (m_dotStorage.getElementPosition(k).getID() == id) {
+				params.add(m_dotStorage.getElementPosition(k).getx());
+				params.add(m_dotStorage.getElementPosition(k).gety());
+				return 0;
+			}
+		}
+		return -1;
+	}
+
+	
 private:
 	Storage<dot> m_dotStorage;
-	Storage<segment> m_segmentStorage;	
+	Storage<segment> m_segmentStorage;
 };
+
+
+
 
 int main() {
 	Base base;
+	ID firstPointId = base.addObject(OBJ_DOT);
+	Storage<double> firstPointParams;
+	if (base.getObjParams(firstPointId, firstPointParams) == 0) {
+		for (size_t k = 0; k < firstPointParams.size(); ++k)
+			std::cout << firstPointParams.getElementPosition(k) << std::endl;
+	}
 	
-	Storage<dot> dotStorage;
-	Storage<segment> segmentStorage;
-
-	dot d(1.3,2.6);
-	dot d1(1.22, 2.6);
-	dot d2(1.2456, 12);
-		
-	segment s(d1,d2);
-	
-	dotStorage.add(d);
-	
-	segmentStorage.add(s);
-	
-	std::cout << "testAddDot " << (testAddDot() ? "OK" : "No") << std::endl;
-	std::cout << "testAddSegment " << (testAddSegment() ? "OK" : "No") << std::endl;
-	std::cout << "testRemove " << (testRemove() ? "OK" : "No") << std::endl;
-	std::cout << "testGetElement " << (testGetElement() ? "OK" : "No") << std::endl;
 	return 0;
 }
