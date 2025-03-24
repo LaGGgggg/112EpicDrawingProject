@@ -34,9 +34,13 @@ public:
 			return m_dotStorage.getElementPosition(m_dotStorage.size() - 1).getID();
 			break;
 		case OBJ_SEG:
-
+			m_segmentStorage.add(segment(dot(), dot()));
+			return m_segmentStorage.getElementPosition(m_segmentStorage.size() - 1).getID();
 			break;
 		}
+
+		default:
+			std::cerr << "Invalid object type" << std::endl;
 	};
 
 	SRPResult setRelativePos(Storage<ID>& objects, RelativePosType rpt) {
