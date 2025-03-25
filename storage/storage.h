@@ -40,7 +40,7 @@ public:
         return m_size;
     }
 
-    El* getElementPosition(int pos) {
+    El& operator[](int pos) {
         if (pos < m_size && pos >= 0) {
             return m_storage[pos];
         }
