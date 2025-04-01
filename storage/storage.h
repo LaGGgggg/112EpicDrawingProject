@@ -107,7 +107,7 @@ int searchInsertPos(const Storage<T>& arr, const T& value) {
         }
     }
 
-    return left;
+    return -1;
 }
 
 #endif // STORAGE_H
