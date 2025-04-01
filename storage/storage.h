@@ -7,6 +7,9 @@
 #include <cstddef>
 
 template<typename El>
+
+
+
 class Storage {
 public:
     Storage() : m_storage(nullptr), m_size(0) {}
@@ -46,7 +49,6 @@ public:
         }
         throw "invalid position";
     }
-
     /*
     El* findElementByID(ID id) {
         for (size_t i = 0; i < m_size; ++i) {
@@ -62,31 +64,12 @@ public:
         delete[] m_storage;
     }
 
-    class Iterator {
-    public:
-
-        explicit Iterator(El* ptr) : ptr(ptr) {}
-
-        El& operator*() const { return *ptr; }
-        Iterator& operator++() { ++ptr; return *this; }
-        Iterator operator++(int) {
-            Iterator tmp = *this;
-            ++ptr;
-            return tmp;
-        }
-        bool operator==(const Iterator& other) const { return ptr == other.ptr; }
-
-    private:
-        El* ptr;
-    };
-
-    Iterator begin() { return Iterator(m_storage); }
-    Iterator end() { return Iterator(m_storage + m_size); }
-
 private:
     El* m_storage;
     size_t m_size;
 };
+template<typename El>
+void sortStorage(Storage<El>& st);
 
 template<typename T>
 int searchInsertPos(const Storage<T>& arr, const T& value) {
