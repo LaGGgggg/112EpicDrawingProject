@@ -3,6 +3,47 @@
 #include "bitmap.h"
 #include <cmath>
 
+
+// coздание bitmap файла
+void BitMap::saveTo(const char* filename) {
+    
+    bmp_header header;
+    bmp_info_header info_header;
+
+    info_header.rows = cols_;
+    info_header.cols = rows_;
+    header.Size += line_ * rows_;
+    info_header.SizeImage = line_ * rows_;
+    
+
+    //создание файла
+    std::ofstream file(filename, std::ios::binary);
+    if (!file) {
+        std::cout << "File can't be created" << std::endl;
+        return;
+    }
+
+    // Запись заголовков в файл
+    file.write(reinterpret_cast<const char*>(&header), sizeof(bmp_header));
+    file.write(reinterpret_cast<const char*>(&info_header), sizeof(bmp_info_header));
+
+
+    for (int i = 0; i < size_; ++i) {
+
+            uint8_t pixel = pixel_matrix[i]; 
+            file.write(reinterpret_cast<const char*>(&pixel), 1);
+        
+
+        // Добавление пустых байтов для выравнивания строки
+        uint8_t padding[3] = { 0 };
+        file.write(reinterpret_cast<const char*>(padding), line_ - rows_);
+    }
+
+    file.close();
+    std::cout << "File was created: " << filename << std::endl;
+}
+
+
 /*
 bool loadBitMap(const char* filename) {
 	std::fstream fs;
