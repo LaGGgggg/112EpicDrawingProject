@@ -1,4 +1,5 @@
 #include "../ID/idgenerator.h"
+#include "../storage/storage.h"
 class Base {
 public:
     ID addObject(ObjType otype) {
@@ -15,6 +16,22 @@ public:
             std::cerr << "Invalid object type" << std::endl;
         }
     };
+    void removeObject(int ID) {
+		for (size_t k = 0; k < m_dotStorage.size(); ++k) {
+			if (m_dotStorage[k].id == ID) {
+				delete m_dotStorage[k].data;
+				m_dotStorage.remove(k);
+				return;
+			}
+		}
+		for (size_t k = 0; k < m_segmentStorage.size(); ++k) {
+			if (m_segmentStorage[k].id == ID) {
+				delete m_segmentStorage[k].data;
+				m_segmentStorage.remove(k);
+				return;
+			}
+		}
+    }
 
     SRPResult setRelativePos(Storage<ID>& objects, RelativePosType rpt) {
         // Проверка на корректность пожеланий пользователя
