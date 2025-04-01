@@ -60,6 +60,27 @@ public:
     }
     */
 
+    class Iterator {
+    public:
+
+        explicit Iterator(El* ptr) : ptr(ptr) {}
+
+        El& operator*() const { return *ptr; }
+        Iterator& operator++() { ++ptr; return *this; }
+        Iterator operator++(int) {
+            Iterator tmp = *this;
+            ++ptr;
+            return tmp;
+        }
+        bool operator==(const Iterator& other) const { return ptr == other.ptr; }
+
+    private:
+        El* ptr;
+    };
+
+    Iterator begin() { return Iterator(m_storage); }
+    Iterator end() { return Iterator(m_storage + m_size); }
+
     ~Storage() {
         delete[] m_storage;
     }
