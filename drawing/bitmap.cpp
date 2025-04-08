@@ -75,7 +75,7 @@ bool loadBitMap(const char* filename) {
 }
 */
 
-void BitMap::setPixel(uint32_t x, uint32_t y, bool isBlack){
+/*void BitMap::setPixel(uint32_t x, uint32_t y, bool isBlack){
     if (x < 0 || x >= cols || y < 0 || y >= rows) {
         return;
     }
@@ -95,7 +95,7 @@ bool BitMap::isBlack(uint32_t x,uint32_t y){
     size_t rowsize = cols / 32 + (cols%32? 1 : 0);
     uint32_t* row = data + y * rowsize;
     return (row[x/32] & (1 << (x % 32))) != 0;
-}
+}*/
 
 // Отрисовка линии в BitMap файле
 void BitMap::drawSegment(uint32_t x1, uint32_t y1, uint32_t x2, uint32_t y2, bool isBlack) {
