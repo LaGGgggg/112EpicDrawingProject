@@ -15,7 +15,6 @@ void BitMap::saveTo(const char* filename) {
     header.Size += line_ * rows_;
     info_header.SizeImage = line_ * rows_;
     
-
     //создание файла
     std::ofstream file(filename, std::ios::binary);
     if (!file) {
@@ -35,6 +34,22 @@ void BitMap::saveTo(const char* filename) {
 
     file.close();
     std::cout << "File was created: " << filename << std::endl;
+}
+
+void BitMap::setPixel(const uint8_t x, const uint8_t y, const bool isBlack) const {
+
+	if (x >= cols_ || y >= rows_) {
+		throw std::out_of_range("Pixel coordinates out of bounds");
+	}
+
+	const size_t byteIndex = y * line_ + x / 8;
+	const uint8_t bitMask = 1 << (7 - x % 8);
+
+	if (isBlack) {
+		pixel_matrix[byteIndex] &= ~bitMask;
+	} else {
+		pixel_matrix[byteIndex] |= bitMask;
+	}
 }
 
 
