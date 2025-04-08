@@ -27,17 +27,11 @@ void BitMap::saveTo(const char* filename) {
     file.write(reinterpret_cast<const char*>(&header), sizeof(bmp_header));
     file.write(reinterpret_cast<const char*>(&info_header), sizeof(bmp_info_header));
 
-
-    for (int i = 0; i < size_; ++i) {
-
-            uint8_t pixel = pixel_matrix[i]; 
-            file.write(reinterpret_cast<const char*>(&pixel), 1);
-        
-
-        // Добавление пустых байтов для выравнивания строки
-        uint8_t padding[3] = { 0 };
-        file.write(reinterpret_cast<const char*>(padding), line_ - rows_);
-    }
+		for (int row = 0; row < rows_; ++row) {
+				file.write(reinterpret_cast<const char*>(&pixel_matrix[row * line_]), cols_ / 8);
+				uint8_t padding[3] = {0}; // Padding bytes
+				file.write(reinterpret_cast<const char*>(padding), line_ - (cols_ / 8));
+		}
 
     file.close();
     std::cout << "File was created: " << filename << std::endl;

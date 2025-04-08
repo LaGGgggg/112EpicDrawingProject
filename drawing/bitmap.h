@@ -6,11 +6,10 @@
 
 class BitMap {
 private:
-    const int rows_; // количество строк
-    const int cols_; // длина строки
+    const uint32_t rows_; // количество строк
+    const uint32_t cols_; // длина строки
 
-    int tmp_ = (cols_ % 32 == 0) ? 0 : 1;
-    const int line_ = (cols_ / 32 * 32 + tmp_) / 8; // длина строки в байтах
+    uint32_t line_; // длина строки в байтах
     size_t size_ = rows_ * line_;
 
     uint8_t* pixel_matrix;
@@ -55,7 +54,11 @@ private:
 public:
 
     BitMap(uint32_t rows, uint32_t cols, bool isBlack = false) : rows_(rows), cols_(cols), isBlack_(isBlack) {
-        
+
+        const uint32_t tmp_ = (cols_ % 32 == 0) ? 0 : 1;
+        line_ = (cols_ / 32 * 32 + tmp_) / 8; // длина строки в байтах
+        size_ = rows_ * line_;
+
         uint8_t color = 0;
         if (!isBlack_) {
             color = 255; // - белый цвет пикселей фона
