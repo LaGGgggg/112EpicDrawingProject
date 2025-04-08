@@ -36,7 +36,7 @@ void BitMap::saveTo(const char* filename) {
     std::cout << "File was created: " << filename << std::endl;
 }
 
-void BitMap::setPixel(const uint8_t x, const uint8_t y, const bool isBlack) const {
+void BitMap::setPixel(const uint8_t x, const uint8_t y, const bool isBlack) {
 
 	if (x >= cols_ || y >= rows_) {
 		throw std::out_of_range("Pixel coordinates out of bounds");
@@ -52,7 +52,7 @@ void BitMap::setPixel(const uint8_t x, const uint8_t y, const bool isBlack) cons
 	}
 }
 
-void BitMap::drawSegment(uint32_t x1, uint32_t y1, const uint32_t x2, const uint32_t y2, const bool isBlack) const {
+void BitMap::drawSegment(uint32_t x1, uint32_t y1, const uint32_t x2, const uint32_t y2, const bool isBlack) {
 
 	const int dx = abs(static_cast<int>(x2) - static_cast<int>(x1));
 	const int dy = abs(static_cast<int>(y2) - static_cast<int>(y1));

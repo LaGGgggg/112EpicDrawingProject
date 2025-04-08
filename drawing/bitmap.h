@@ -77,9 +77,9 @@ public:
 
     void saveTo(const char* filename);
     void loadFrom(const char* filename);
-    void setPixel(uint8_t x, uint8_t y, bool isBlack) const;
+    void setPixel(uint8_t x, uint8_t y, bool isBlack);
     bool isBlack(uint32_t x, uint32_t y);
-    void drawSegment(uint32_t x1, uint32_t y1, uint32_t x2, uint32_t y2, bool isBlack) const;
+    void drawSegment(uint32_t x1, uint32_t y1, uint32_t x2, uint32_t y2, bool isBlack);
 
 
 };
