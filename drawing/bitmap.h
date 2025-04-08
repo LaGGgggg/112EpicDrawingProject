@@ -8,23 +8,26 @@ class BitMap {
 private:
     const int rows_; // количество строк
     const int cols_; // длина строки
-    bool isBlack_; // - цвет фона
 
     int tmp_ = (cols_ % 32 == 0) ? 0 : 1;
     const int line_ = (cols_ / 32 * 32 + tmp_) / 8; // длина строки в байтах
+    size_t size_ = rows_ * line_;
 
-    size_t size_ = rows_ * line_; // размер картинки в байтах
     uint8_t* pixel_matrix;
 
 
+    bool isBlack_; // - цвет фона
+    
+    
+
+
     //заголовки BitMap файла
-#pragma pack(push, 1)  
-// Чтобы данные записывались вплотую
+#pragma pack(push, 1) // Чтобы данные записывались вплотую
     struct bmp_header {
         uint16_t Type{ 0x4D42 }; 
         uint32_t Size{ 62 };         // Размер BMP файла в байтах
-        uint16_t Reserved1{ 0 };     // резервированное поле
-        uint16_t Reserved2{ 0 };     // резервированное поле
+        uint16_t Reserved1{ 0 };   
+        uint16_t Reserved2{ 0 };
         uint32_t offset{ 62 };       // Размер заголовка до кодирования пикселей
     };
     struct bmp_info_header {
@@ -43,9 +46,9 @@ private:
         int32_t XPelsPerMeter{ 0 };   // Горизонтальное разрешение
         int32_t YPelsPerMeter{ 0 };   // Вертикальное разрешение
         uint32_t colors{ 0 };         // Количество цветов
-        uint32_t Important_color{ 0 };// Количество важных цветов
-        uint32_t num_color_one { 0 }; // код первого цвета
-        uint32_t num_color_two{ 0xFFFFFF }; // код второго цвета
+        uint32_t Important_color{ 0 };   // Количество важных цветов
+        uint32_t num_color_one { 0 };
+        uint32_t num_color_two{ 0xFFFFFF };
     };
 #pragma pack(pop)
 
@@ -58,20 +61,22 @@ public:
             color = 255; // - белый цвет пикселей фона
         }
 
-	//заполнение фона 
         pixel_matrix = new uint8_t[line_ * rows_];
         for (int i = 0; i < size_; ++i) {
             pixel_matrix[i] = color;
         }
-    }
+        
 
+    }
     ~BitMap() {
         delete[] pixel_matrix;
     }
 
     void saveTo(const char* filename);
     void loadFrom(const char* filename);
-    void setPixel(uint32_t x, uint32_t y, bool isBlack);
+    void setPixel(uint8_t x, uint8_t y, bool isBlack);
     bool isBlack(uint32_t x, uint32_t y);
     void drawSegment(uint32_t x1, uint32_t y1, uint32_t x2, uint32_t y2, bool isBlack);
+
+
 };
