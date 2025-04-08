@@ -52,6 +52,35 @@ void BitMap::setPixel(const uint8_t x, const uint8_t y, const bool isBlack) cons
 	}
 }
 
+void BitMap::drawSegment(uint32_t x1, uint32_t y1, const uint32_t x2, const uint32_t y2, const bool isBlack) const {
+
+	const int dx = abs(static_cast<int>(x2) - static_cast<int>(x1));
+	const int dy = abs(static_cast<int>(y2) - static_cast<int>(y1));
+	const int sx = x1 < x2 ? 1 : -1;
+	const int sy = y1 < y2 ? 1 : -1;
+	int err = dx - dy;
+
+	while (true) {
+
+		setPixel(x1, y1, isBlack);
+
+		if (x1 == x2 && y1 == y2) {
+			break;
+		}
+
+		const int e2 = 2 * err;
+
+		if (e2 > -dy) {
+			err -= dy;
+			x1 += sx;
+		}
+		if (e2 < dx) {
+			err += dx;
+			y1 += sy;
+		}
+	}
+}
+
 
 /*
 bool loadBitMap(const char* filename) {

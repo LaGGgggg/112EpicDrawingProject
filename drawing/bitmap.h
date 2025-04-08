@@ -79,7 +79,7 @@ public:
     void loadFrom(const char* filename);
     void setPixel(uint8_t x, uint8_t y, bool isBlack) const;
     bool isBlack(uint32_t x, uint32_t y);
-    void drawSegment(uint32_t x1, uint32_t y1, uint32_t x2, uint32_t y2, bool isBlack);
+    void drawSegment(uint32_t x1, uint32_t y1, uint32_t x2, uint32_t y2, bool isBlack) const;
 
 
 };
