@@ -80,9 +80,9 @@ public:
 
     void saveTo(const char* filename);
     void loadFrom(const char* filename);
-    void setPixel(uint8_t x, uint8_t y, bool isBlack);
-    bool isBlack(uint32_t x, uint32_t y);
-    void drawSegment(uint32_t x1, uint32_t y1, uint32_t x2, uint32_t y2, bool isBlack);
+    void setPixel(uint32_t r, uint32_t c, bool isBlack);
+    bool isBlack(uint32_t r, uint32_t c);
+    void drawSegment(uint32_t r1, uint32_t c1, uint32_t r2, uint32_t c2, bool isBlack);
 
 
 };

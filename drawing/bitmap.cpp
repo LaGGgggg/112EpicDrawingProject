@@ -36,14 +36,13 @@ void BitMap::saveTo(const char* filename) {
     std::cout << "File was created: " << filename << std::endl;
 }
 
-void BitMap::setPixel(const uint8_t x, const uint8_t y, const bool isBlack) {
-
-	if (x >= cols_ || y >= rows_) {
+void BitMap::setPixel(const uint32_t r, const uint32_t c, const bool isBlack) {
+    if (c >= cols_ || r >= rows_) {
 		throw std::out_of_range("Pixel coordinates out of bounds");
 	}
 
-	const size_t byteIndex = y * line_ + x / 8;
-	const uint8_t bitMask = 1 << (7 - x % 8);
+    const size_t byteIndex = (rows_ - r - 1) * line_ + c / 8;
+    const uint8_t bitMask = 1 << (7 - c % 8);
 
 	if (isBlack) {
 		pixel_matrix[byteIndex] &= ~bitMask;
@@ -175,6 +174,14 @@ void BitMap::drawSegment(uint32_t x1, uint32_t y1, uint32_t x2, uint32_t y2, boo
     }
 }
 */
-bool BitMap::isBlack(uint32_t x, uint32_t y){
-    return false;
+bool BitMap::isBlack(uint32_t r, uint32_t c){
+
+    if (c >= cols_ || r >= rows_) {
+        throw std::out_of_range("Pixel coordinates out of bounds");
+    }
+
+    const size_t byteIndex = (rows_ - r - 1) * line_ + c / 8;
+    const uint8_t bitMask = 1 << (7 - c % 8);
+
+    return (pixel_matrix[byteIndex] & bitMask) == 0;
 }
