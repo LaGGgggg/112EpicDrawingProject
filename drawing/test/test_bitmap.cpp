@@ -3,7 +3,7 @@
 
 TEST(testBitmap, setPixel){
 	BitMap bmp(32,32);
-	bool bIsBlack = true;
+    const bool bIsBlack = true;
 	bmp.setPixel(2,2,bIsBlack);
 	ASSERT_TRUE(bmp.isBlack(2, 2));
 	ASSERT_FALSE(bmp.isBlack(1, 2));
@@ -13,7 +13,7 @@ TEST(testBitmap, setPixel){
 }
 
 TEST(testBitmap, saveLoadWhite) {
-	bool bIsBlack = false;
+    const bool bIsBlack = false;
 	BitMap bmp(32, 32, bIsBlack);
 	bmp.saveTo("white.bmp");
 	BitMap bmp1(16, 16);
@@ -23,7 +23,7 @@ TEST(testBitmap, saveLoadWhite) {
 			ASSERT_FALSE(bmp1.isBlack(r, c));
 }
 TEST(testBitmap, saveLoadBlack) {
-	bool bIsBlack = true;
+    const bool bIsBlack = true;
 	BitMap bmp2(32, 32, bIsBlack);
 	bmp2.saveTo("black.bmp");
 	BitMap bmp3(16, 16);
@@ -35,7 +35,7 @@ TEST(testBitmap, saveLoadBlack) {
 	
 TEST(testBitmap, saveLoad) {
 	BitMap bmp(32, 32);
-	bool bIsBlack = true;
+    const bool bIsBlack = true;
 	bmp.setPixel(2, 2, bIsBlack);
 	bmp.saveTo("test1.bmp");
 	BitMap bmp1(16, 16);
@@ -47,18 +47,23 @@ TEST(testBitmap, saveLoad) {
 
 TEST(testBitmap, drawVerticalSeg){
 	BitMap bmp(32, 32);
-	bool bIsBlack = true;
-	for (unsigned y = 2; y < 30; ++y)
-		bmp.setPixel(2, y,bIsBlack);
+    const bool bIsBlack = true;
+    const uint32_t colNum = 2;
+    for (unsigned r = 2; r < 30; ++r)
+        bmp.setPixel(r, colNum ,bIsBlack);
 	bmp.saveTo("vertSeg.bmp");	
-	for (uint32_t k = 2; k < 7; ++k) {
-		ASSERT_TRUE(bmp.isBlack(2, k));
+    for (uint32_t r = 2; r < 30; ++r) {
+        ASSERT_TRUE(bmp.isBlack(r,colNum));
 	}
-	
+    for (uint32_t r = 2; r < 30; ++r) {
+        ASSERT_FALSE(bmp.isBlack(r,colNum-1));
+        ASSERT_FALSE(bmp.isBlack(r,colNum+1));
+    }
 }
+
 TEST(testBitmap, drawDiagSeg){
 	BitMap bmp(32, 32);
-	bool bIsBlack = true;
+    const bool bIsBlack = true;
 	bmp.drawSegment(2, 2, 6, 6, bIsBlack);
 	for (uint32_t k = 2; k < 7; ++k) {
 		ASSERT_TRUE(bmp.isBlack(k, k));
