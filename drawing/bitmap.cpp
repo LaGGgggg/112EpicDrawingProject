@@ -81,7 +81,9 @@ void BitMap::drawSegment(uint32_t x1, uint32_t y1, const uint32_t x2, const uint
 	}
 }
 
+void BitMap::loadFrom(const char* filename){
 
+}
 /*
 bool loadBitMap(const char* filename) {
 	std::fstream fs;
@@ -136,6 +138,7 @@ bool BitMap::isBlack(uint32_t x,uint32_t y){
 }*/
 
 // Отрисовка линии в BitMap файле
+/*
 void BitMap::drawSegment(uint32_t x1, uint32_t y1, uint32_t x2, uint32_t y2, bool isBlack) {
     uint32_t diff_x, diff_y;
     if (x1 <= x2) {
@@ -170,4 +173,8 @@ void BitMap::drawSegment(uint32_t x1, uint32_t y1, uint32_t x2, uint32_t y2, boo
             y1 -= sign_y;
         }
     }
+}
+*/
+bool BitMap::isBlack(uint32_t x, uint32_t y){
+    return false;
 }

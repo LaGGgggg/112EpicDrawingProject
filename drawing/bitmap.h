@@ -10,7 +10,7 @@ private:
     const uint32_t cols_; // длина строки
 
     uint32_t line_; // длина строки в байтах
-    size_t size_ = rows_ * line_;
+    size_t size_;
 
     uint8_t* pixel_matrix;
 
@@ -74,6 +74,9 @@ public:
     ~BitMap() {
         delete[] pixel_matrix;
     }
+
+    uint32_t rows()const{return rows_;}
+    uint32_t cols()const{return cols_;}
 
     void saveTo(const char* filename);
     void loadFrom(const char* filename);
