@@ -1,5 +1,5 @@
-#ifndef SEGMENT_H
-#define SEGMENT_H
+#pragma once
+
 
 #include "dot.h"
 #include <cassert>
@@ -24,5 +24,3 @@ private:
 	dot* m_start;
 	dot* m_end;
 };
-
-#endif // SEGMENT_H

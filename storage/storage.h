@@ -1,5 +1,4 @@
-#ifndef STORAGE_H
-#define STORAGE_H
+#pragma once
 
 #include "../objects/dot.h"
 #include "../objects/segment.h"
@@ -113,5 +112,3 @@ int searchInsertPos(const Storage<T>& arr, const T& value) {
 
     return -1;
 }
-
-#endif // STORAGE_H
