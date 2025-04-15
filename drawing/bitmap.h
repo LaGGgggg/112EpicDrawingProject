@@ -1,25 +1,19 @@
 #pragma once
 #include <cstdint>
-#include <iostream>
-#include <string>
-#include <fstream>
 
 class BitMap {
 private:
-    const uint32_t rows_; // количество строк
-    const uint32_t cols_; // длина строки
+    uint32_t rows_; // количество строк
+    uint32_t cols_; // длина строки
 
-    uint32_t line_; // длина строки в байтах
+    uint32_t line_; // длина строки в байтах, с учетом выравнивания
+    size_t size_;
 
-    uint8_t* pixel_matrix;
-
+    uint8_t* pixel_matrix_;
 
     bool isBlack_; // - цвет фона
-    
-    
 
-
-    //заголовки BitMap файла
+    // заголовки BitMap файла
 #pragma pack(push, 1) // Чтобы данные записывались вплотую
     struct bmp_header {
         uint16_t Type{ 0x4D42 }; 
@@ -31,12 +25,10 @@ private:
     struct bmp_info_header {
         uint32_t Size{ 40 };       // Размер заголовка
 
-
         int32_t rows{ 0 };            // Ширина изображения
         int32_t cols{ 0 };            // Высота изображения
 
-
-        uint16_t Planes{ 1 };         //всегда 1
+        uint16_t Planes{ 1 };         // всегда 1
         uint16_t Bit_Count{ 1 };      // Количество бит на пиксель
         uint32_t Compression{ 0 };    // метод сжатия
         uint32_t SizeImage{ 0 };      // Размер изображения
@@ -55,7 +47,7 @@ public:
     BitMap(uint32_t rows, uint32_t cols, bool isBlack = false) : rows_(rows), cols_(cols), isBlack_(isBlack) {
 
         const uint32_t tmp_ = (cols_ % 32 == 0) ? 0 : 1;
-        line_ = (cols_ / 32 * 32 + tmp_) / 8; // длина строки в байтах
+        line_ = (cols_ / 32 * 32 + tmp_) / 8;
         size_ = rows_ * line_;
 
         uint8_t color = 0;
@@ -63,22 +55,21 @@ public:
             color = 255; // - белый цвет пикселей фона
         }
 
-        pixel_matrix = new uint8_t[line_ * rows_];
+        pixel_matrix_ = new uint8_t[line_ * rows_];
         for (int i = 0; i < size_; ++i) {
-            pixel_matrix[i] = color;
+            pixel_matrix_[i] = color;
         }
-        
-
     }
     ~BitMap() {
-        delete[] pixel_matrix;
+        delete[] pixel_matrix_;
     }
 
-    void saveTo(const char* filename);
-    void loadFrom(const char* filename);
-    void setPixel(uint8_t x, uint8_t y, bool isBlack);
-    bool isBlack(uint32_t x, uint32_t y);
+    [[nodiscard]] uint32_t rows() const { return rows_; }
+    [[nodiscard]] uint32_t cols() const { return cols_; }
+
+    int saveTo(const char* filename);
+    int loadFrom(const char* filename);
+    void setPixel(uint32_t r, uint32_t c, bool isBlack);
+    bool isBlack(uint32_t r, uint32_t c);
     void drawSegment(uint32_t x1, uint32_t y1, uint32_t x2, uint32_t y2, bool isBlack);
-
-
 };

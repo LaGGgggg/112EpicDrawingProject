@@ -1,11 +1,4 @@
-#include <iostream>
-#include <cassert>
-
-#include "storage.h"
-#include "dot.h"
-#include "segment.h"
-#include "idgenerator.h"
-#include "base/base.h"
+#include "bitmap.h"
 
 enum ObjType {
 	OBJ_DOT,
@@ -26,13 +19,12 @@ enum SRPResult {
 };
 
 int main() {
-	Base base;
-	ID firstPointId = base.addObject(OBJ_DOT);
-	Storage<double> firstPointParams;
-	if (base.getObjParams(firstPointId, firstPointParams) == 0) {
-		for (size_t k = 0; k < firstPointParams.size(); ++k)
-			std::cout << firstPointParams.getElementPosition(k) << std::endl;
-	}
+
+	BitMap bmp(32, 32);
+	const bool bIsBlack = true;
+	for (unsigned y = 2; y < 30; ++y)
+		bmp.setPixel(2, y,bIsBlack);
+	bmp.saveTo("vertSeg.bmp");
 	
 	return 0;
 }
