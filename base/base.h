@@ -2,8 +2,8 @@
 
 #include <iostream>
 
-#include "../ID/idgenerator.h"
-#include "../storage/storage.h"
+#include "idgenerator.h"
+#include "storage.h"
 
 
 enum ObjType {
