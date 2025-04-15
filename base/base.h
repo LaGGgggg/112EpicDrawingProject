@@ -60,7 +60,7 @@ public:
     SRPResult setRelativePos(Storage<ID>& objects, RelativePosType rpt) {
         // Проверка на корректность пожеланий пользователя
 
-        const double errorThreshold = 1e-6;
+        constexpr double errorThreshold = 1e-6;
 
         while (getError(objects, rpt) > errorThreshold)  /* Условие необходимости продолжения процедуры поиска значений параметров*/ {
 
@@ -82,25 +82,28 @@ public:
 
     }
 
-    int getObjParams(ID id, Storage<double>& params) {
-        for (size_t k = 0; k < m_dotStorage.size(); ++k) {
-            if (m_dotStorage[k].id == id) {
-                params.add(m_dotStorage[k].data->x);
-                params.add(m_dotStorage[k].data->y);
+    int getObjParams(const ID id, Storage<double>& params) {
+
+        for (auto& [dot_id, dot_data] : m_dotStorage) {
+            if (dot_id == id) {
+                params.add(dot_data->x);
+                params.add(dot_data->y);
                 return 0;
             }
         }
 
-        for (size_t k = 0; k < m_segmentStorage.size(); ++k) {
-            if (m_segmentStorage[k].id == id) {
-                params.add(m_segmentStorage[k].data->getStart().x);
-                params.add(m_segmentStorage[k].data->getStart().y);
-                params.add(m_segmentStorage[k].data->getEnd().x);
-                params.add(m_segmentStorage[k].data->getEnd().y);
+        for (auto& [segment_id, segment_data] : m_segmentStorage) {
+            if (segment_id == id) {
+                params.add(segment_data->getStart().x);
+                params.add(segment_data->getStart().y);
+                params.add(segment_data->getEnd().x);
+                params.add(segment_data->getEnd().y);
             }
         }
+
         return -1;
     }
+
 private:
     struct dotinfo {
         ID id;

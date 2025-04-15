@@ -1,14 +1,12 @@
 #pragma once
 
-#include "../objects/dot.h"
-#include "../objects/segment.h"
 #include <cassert>
 #include <cstddef>
 
+#include "segment.h"
+
+
 template<typename El>
-
-
-
 class Storage {
 public:
     Storage() : m_storage(nullptr), m_size(0) {}
@@ -23,7 +21,7 @@ public:
         m_storage = newStorage;
         ++m_size;
     }
-    void remove(size_t num) {
+    void remove(const size_t num) {
         assert(num < m_size);
 
         El* newStorage = new El[m_size - 1];
@@ -38,7 +36,7 @@ public:
         --m_size;
     }
 
-    size_t size() const {
+    [[nodiscard]] size_t size() const {
         return m_size;
     }
 
