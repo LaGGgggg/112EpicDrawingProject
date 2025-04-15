@@ -1,8 +1,5 @@
 #pragma once
 #include <cstdint>
-#include <iostream>
-#include <string>
-#include <fstream>
 
 class BitMap {
 private:
@@ -14,13 +11,9 @@ private:
 
     uint8_t* pixel_matrix_;
 
-
     bool isBlack_; // - цвет фона
-    
-    
 
-
-    //заголовки BitMap файла
+    // заголовки BitMap файла
 #pragma pack(push, 1) // Чтобы данные записывались вплотую
     struct bmp_header {
         uint16_t Type{ 0x4D42 }; 
@@ -32,12 +25,10 @@ private:
     struct bmp_info_header {
         uint32_t Size{ 40 };       // Размер заголовка
 
-
         int32_t rows{ 0 };            // Ширина изображения
         int32_t cols{ 0 };            // Высота изображения
 
-
-        uint16_t Planes{ 1 };         //всегда 1
+        uint16_t Planes{ 1 };         // всегда 1
         uint16_t Bit_Count{ 1 };      // Количество бит на пиксель
         uint32_t Compression{ 0 };    // метод сжатия
         uint32_t SizeImage{ 0 };      // Размер изображения
@@ -68,21 +59,17 @@ public:
         for (int i = 0; i < size_; ++i) {
             pixel_matrix_[i] = color;
         }
-        
-
     }
     ~BitMap() {
         delete[] pixel_matrix_;
     }
 
-    uint32_t rows()const{return rows_;}
-    uint32_t cols()const{return cols_;}
+    [[nodiscard]] uint32_t rows() const { return rows_; }
+    [[nodiscard]] uint32_t cols() const { return cols_; }
 
     int saveTo(const char* filename);
     int loadFrom(const char* filename);
     void setPixel(uint32_t r, uint32_t c, bool isBlack);
     bool isBlack(uint32_t r, uint32_t c);
-    void drawSegment(uint32_t r1, uint32_t c1, uint32_t r2, uint32_t c2, bool isBlack);
-
-
+    void drawSegment(uint32_t x1, uint32_t y1, uint32_t x2, uint32_t y2, bool isBlack);
 };
