@@ -10,7 +10,6 @@ private:
     const uint32_t cols_; // длина строки
 
     uint32_t line_; // длина строки в байтах
-    size_t size_ = rows_ * line_;
 
     uint8_t* pixel_matrix;
 
