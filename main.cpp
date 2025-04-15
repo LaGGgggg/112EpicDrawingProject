@@ -1,22 +1,5 @@
 #include "bitmap.h"
-
-enum ObjType {
-	OBJ_DOT,
-	OBJ_SEG
-};
-
-enum RelativePosType {
-	COINSIDENT_DOTS,
-	EQUAL_LENGTH_SEGMENTS, // Отрезки должны быть одинаковы по длине
-	ORTHO_SEGMENTS, // Отрезки должны быть ортогональны
-
-};
-
-enum SRPResult {
-	ALL_OK = 0,
-	INVALID_OBJECTS,
-	INVALID_RELPOS
-};
+#include "base/base.h"
 
 int main() {
 

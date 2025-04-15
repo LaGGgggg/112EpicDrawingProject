@@ -1,5 +1,29 @@
+#pragma once
+
+#include <iostream>
+
 #include "../ID/idgenerator.h"
 #include "../storage/storage.h"
+
+
+enum ObjType {
+    OBJ_DOT,
+    OBJ_SEG
+};
+
+enum RelativePosType {
+    COINSIDENT_DOTS,
+    EQUAL_LENGTH_SEGMENTS, // Отрезки должны быть одинаковы по длине
+    ORTHO_SEGMENTS, // Отрезки должны быть ортогональны
+};
+
+enum SRPResult {
+    ALL_OK = 0,
+    INVALID_OBJECTS,
+    INVALID_RELPOS
+};
+
+
 class Base {
 public:
     ID addObject(ObjType otype) {
@@ -16,16 +40,16 @@ public:
             std::cerr << "Invalid object type" << std::endl;
         }
     };
-    void removeObject(int ID) {
+    void removeObject(int id) {
 		for (size_t k = 0; k < m_dotStorage.size(); ++k) {
-			if (m_dotStorage[k].id == ID) {
+			if (m_dotStorage[k].id == id) {
 				delete m_dotStorage[k].data;
 				m_dotStorage.remove(k);
 				return;
 			}
 		}
 		for (size_t k = 0; k < m_segmentStorage.size(); ++k) {
-			if (m_segmentStorage[k].id == ID) {
+			if (m_segmentStorage[k].id == id) {
 				delete m_segmentStorage[k].data;
 				m_segmentStorage.remove(k);
 				return;
