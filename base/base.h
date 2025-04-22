@@ -255,6 +255,13 @@ public:
         return -1;
     }
 
+    Storage<dotinfo>* getDotStorage() {
+        return &m_dotStorage;
+    }
+    Storage<seginfo>* getSegmentStorage() {
+        return &m_segmentStorage;
+    }
+
 private:
 
     class relativePositionInfo {
