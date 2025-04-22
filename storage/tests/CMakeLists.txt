@@ -19,6 +19,11 @@ add_executable(
 	test_storage 
 	test_storage.cpp
 	../storage.h
+	test_mapper.cpp
+	../mapper.h
+	../../ID/idgenerator.h
+	../../ID/idgenerator.cpp
+
 )
 include_directories(
 	..
