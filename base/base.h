@@ -90,8 +90,8 @@ public:
                 }
 
                 // Assuming the first two objects are segments
-                const segment* seg1 = m_segmentStorage[objects[0]].data;
-                const segment* seg2 = m_segmentStorage[objects[1]].data;
+                const segment* seg1 = m_segmentStorage.findElementByID(objects[0])->data;
+                const segment* seg2 = m_segmentStorage.findElementByID(objects[1])->data;
 
                 const double dx1 = seg1->getEnd().x - seg1->getStart().x;
                 const double dy1 = seg1->getEnd().y - seg1->getStart().y;
@@ -111,8 +111,8 @@ public:
                 }
 
                 // Assuming the first two objects are segments
-                const segment* seg1 = m_segmentStorage[objects[0]].data;
-                const segment* seg2 = m_segmentStorage[objects[1]].data;
+                const segment* seg1 = m_segmentStorage.findElementByID(objects[0])->data;
+                const segment* seg2 = m_segmentStorage.findElementByID(objects[1])->data;
 
                 // Calculate lengths
                 const double length1 = std::sqrt(
@@ -134,8 +134,8 @@ public:
                 }
 
                 // Assuming the first two objects are dots
-                const dot* dot1 = m_dotStorage[objects[0]].data;
-                const dot* dot2 = m_dotStorage[objects[1]].data;
+                const dot* dot1 = m_dotStorage.findElementByID(objects[0])->data;
+                const dot* dot2 = m_dotStorage.findElementByID(objects[1])->data;
 
                 const double dx = dot1->x - dot2->x;
                 const double dy = dot1->y - dot2->y;
