@@ -2,8 +2,10 @@
 
 #include <cassert>
 #include <cstddef>
+#include <stdexcept>
 
 #include "segment.h"
+#include "idgenerator.h"
 
 
 template<typename El>
@@ -47,16 +49,16 @@ public:
         }
         throw "invalid position";
     }
-    /*
     El* findElementByID(ID id) {
+
         for (size_t i = 0; i < m_size; ++i) {
-            if (m_storage[i].getID() == id) {
+            if (m_storage[i].id == id) {
                 return &m_storage[i];
             }
         }
+
         return nullptr;
     }
-    */
 
     class Iterator {
     public:
