@@ -47,7 +47,8 @@ public:
         if (pos < m_size && pos >= 0) {
             return m_storage[pos];
         }
-        throw "invalid position";
+
+        throw std::out_of_range("Index out of range");
     }
     El* findElementByID(ID id) {
 
