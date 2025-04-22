@@ -3,13 +3,23 @@
 #include <cassert>
 #include <cstddef>
 
-#include "segment.h"
-
 
 template<typename El>
 class Storage {
 public:
     Storage() : m_storage(nullptr), m_size(0) {}
+	Storage(const Storage<El>& s) : m_size(s.m_size) {
+		m_storage = new El[m_size];
+		for (size_t k = 0; k < m_size; ++k)
+			m_storage[k] = s.m_storage[k];
+	}
+	void operator=(const Storage<El>& s) {
+		delete[] m_storage;
+		m_size = s.m_size;
+		m_storage = new El[m_size];
+		for (size_t k = 0; k < m_size; ++k)
+			m_storage[k] = s.m_storage[k];
+	}
 
     void add(const El& d) {
         El* newStorage = new El[m_size + 1];
@@ -70,7 +80,7 @@ public:
             return tmp;
         }
         bool operator==(const Iterator& other) const { return ptr == other.ptr; }
-
+		bool operator!=(const Iterator& other) const { return !(ptr == other.ptr); }
     private:
         El* ptr;
     };
