@@ -19,6 +19,15 @@ public:
 		return *m_end;
 	}
 
+	void updateStart(dot* s) {
+		assert(s);
+		m_start = s;
+	}
+	void updateEnd(dot* e) {
+		assert(e);
+		m_end = e;
+	}
+
 private:
 	dot* m_start;
 	dot* m_end;
