@@ -29,33 +29,36 @@ public:
 		throw std::invalid_argument("Can't find");
 	}
 
+
 	size_t size()const { return m_sto.size(); }
 
-/*
+
 	class Iterator {
 
 	public:
 		explicit Iterator(
-			//	El* ptr
-		) : {}
+            const Storage< KV<Key, Value> >::Iterator& it
+            ) :m_ptr(it){}
 
-		KV& operator*() const {
-			//	return *ptr; 
+        KV<Key,Value>& operator*() const {
+            return *m_ptr;
 		}
 		Iterator& operator++() {
-			//++ptr; return *this; 
+            ++m_ptr; return *this;
 		}
 		Iterator operator++(int) {
-			/*Iterator tmp = *this;
-			++ptr;
+            Iterator tmp = *this;
+            ++m_ptr;
             return tmp;
 		}
-		bool operator==(const Iterator& other) const { return ptr == other.ptr; }
-		bool operator!=(const Iterator& other) const { return !(ptr == other.ptr); }
+        bool operator==(const Iterator& other) const { return m_ptr == other.m_ptr; }
+        bool operator!=(const Iterator& other) const { return !(m_ptr == other.m_ptr); }
 	private:
-		//El * ptr;
+        Storage< KV<Key, Value> >::Iterator m_ptr;
 	};
-*/
+    Iterator begin() { return Iterator(m_sto.begin()); }
+    Iterator end() { return Iterator(m_sto.end()); }
+
 private:
 
 	Storage< KV<Key, Value> > m_sto;

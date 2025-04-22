@@ -3,22 +3,26 @@
 #include "../../objects/dot.h"
 #include "../../ID/idgenerator.h"
 #include <iostream>
-/*
-Storage<dot> createTestDotStorage() {
-    Storage<dot> ds;
+
+Mapper<ID,dot> createTestDotMapper() {
+    Mapper<ID,dot> ds;
+
     dot d1{1.1, 1.1};
     dot d2{2.2, 2.2};
     dot d3{3.3, 3.3};
-    ds.add(d1);
-    ds.add(d2);
-    ds.add(d3);
+    ds[generateID()] = d1;
+    ds[generateID()] = d2;
+    ds[generateID()] = d3;
     return ds;
 }
-  */
+
 class TestMapper : public ::testing::Test{
 protected:    
-    Mapper<ID,dot> ds_empty;    
+    Mapper<ID,dot> ds_empty;
+    Mapper<ID,dot> ds;
+
     void SetUp(){
+        ds = createTestDotMapper();
     }
 };
 
@@ -32,6 +36,20 @@ TEST_F(TestMapper, addDot) {
     ASSERT_DOUBLE_EQ(Dot.x, 1.4);
     ASSERT_DOUBLE_EQ(Dot.y, 2.5);
 }
+
+TEST_F(TestMapper, iterate) {
+    double x = 1.1;
+    double y = 1.1;
+
+
+    for ( auto it = ds.begin(); it != ds.end(); ++it){
+        ASSERT_DOUBLE_EQ((*it).value.x, x);
+        ASSERT_DOUBLE_EQ((*it).value.y, y);
+        x += 1.1;
+        y += 1.1;
+    }
+}
+
 /*  
 TEST_F(TestStorage, addSegment){
     segment s1{{1.4, 2.5}, {2.4, 3.5}};
