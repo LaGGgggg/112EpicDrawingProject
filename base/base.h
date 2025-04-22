@@ -27,6 +27,17 @@ enum SRPResult {
 
 class Base {
 public:
+
+    struct dotinfo {
+        ID id;
+        dot* data;
+    };
+
+    struct seginfo {
+        ID id;
+        segment* data;
+    };
+
     ID addObject(ObjType otype) {
         switch (otype) {
         case OBJ_DOT:
@@ -62,11 +73,16 @@ public:
 
         m_relativePositionInfoStorage.add({&objects, rpt});
 
-        // Проверка на корректность пожеланий пользователя
-
         constexpr double errorThreshold = 1e-6;
+        constexpr double learningRate = 0.01;  // Step size for adjustments
+        constexpr int stepsLimit = 10'000;
 
-        while (getError(objects, rpt) > errorThreshold)  /* Условие необходимости продолжения процедуры поиска значений параметров*/ {
+        int steps = 0;
+
+        // Проверка на корректность пожеланий пользователя
+        while (getError(objects, rpt) > errorThreshold && steps <= stepsLimit)  /* Условие необходимости продолжения процедуры поиска значений параметров*/ {
+
+            std::cout << "[DEBUG] Current error: " << getError(objects, rpt) << std::endl;
 
             // Выбираем как изменить параметры объектов 
             // (для этого надо уметь вычислять частные производные 
@@ -77,7 +93,71 @@ public:
             // модифицирующие положение точек и отрезков)
             // Оцениваем как изменилась ситуации с точки зрения 
             // выполнения пожеланий пользователя
+
+            for (size_t i = 0; i < objects.size(); ++i) {
+
+                std::cout << "[DEBUG] Processing object with ID: " << objects[i] << std::endl;
+                const ID objId = objects[i];
+
+                if (const dotinfo* element = m_dotStorage.findElementByID(objId)) {
+
+                    dot* d = element->data;
+
+                    const double originalError = getError(objects, rpt);
+
+                    d->x += learningRate;
+                    const double gradX = (getError(objects, rpt) - originalError) / learningRate;
+                    d->x -= learningRate;
+
+                    d->y += learningRate;
+                    const double gradY = (getError(objects, rpt) - originalError) / learningRate;
+                    d->y -= learningRate;
+
+                    d->x -= learningRate * gradX;
+                    d->y -= learningRate * gradY;
+                }
+
+                if (const seginfo* element = m_segmentStorage.findElementByID(objId)) {
+
+                    segment* seg = element->data;
+
+                    // Start point
+                    dot* start = &seg->getStart();
+                    double originalError = getError(objects, rpt);
+
+                    start->x += learningRate;
+                    const double gradStartX = (getError(objects, rpt) - originalError) / learningRate;
+                    start->x -= learningRate;
+
+                    start->y += learningRate;
+                    const double gradStartY = (getError(objects, rpt) - originalError) / learningRate;
+                    start->y -= learningRate;
+
+                    start->x -= learningRate * gradStartX;
+                    start->y -= learningRate * gradStartY;
+
+                    // End point
+                    dot* end = &seg->getEnd();
+                    originalError = getError(objects, rpt);
+
+                    end->x += learningRate;
+                    const double gradEndX = (getError(objects, rpt) - originalError) / learningRate;
+                    end->x -= learningRate;
+
+                    end->y += learningRate;
+                    const double gradEndY = (getError(objects, rpt) - originalError) / learningRate;
+                    end->y -= learningRate;
+
+                    end->x -= learningRate * gradEndX;
+                    end->y -= learningRate * gradEndY;
+                }
+            }
+
+            ++steps;
+            std::cout << "[DEBUG] Steps: " << steps << std::endl;
         }
+
+        return SRPResult::ALL_OK;
     }
 
     double getError(Storage<ID>& objects, const RelativePosType rpt) {
@@ -176,15 +256,6 @@ public:
     }
 
 private:
-    struct dotinfo {
-        ID id;
-        dot* data;
-    };
-
-    struct seginfo {
-        ID id;
-        segment* data;
-    };
 
     class relativePositionInfo {
     public:
