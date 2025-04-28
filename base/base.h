@@ -2,9 +2,11 @@
 
 #include <iostream>
 #include <cmath>
+#include <fstream>
+#include <string>
 
-#include "idgenerator.h"
-#include "storage.h"
+#include "../ID/idgenerator.h"
+#include "../storage/storage.h"
 
 
 enum ObjType {
@@ -171,8 +173,81 @@ public:
                 params.add(segment_data->getEnd().y);
             }
         }
-
         return -1;
+    }
+
+    // int setObjParams(){
+
+    // }
+
+    int generateReport(const char* filename){
+        std::ofstream outFile;
+        outFile.open(filename, std::ios_base::trunc);
+        if(!outFile.is_open()){
+            std::cerr << "Error: cannot open file " << filename << "to make report" << std::endl;
+            return -1;
+        }
+
+        outFile << "Dots:\n";
+        for (const auto& dotInfo : m_dotStorage) {
+            outFile << "ID: " << dotInfo.id << " ; X: " << dotInfo.data->x << " ; Y: " << dotInfo.data->y << "\n";
+        }
+
+        outFile << "\nSegments:\n";
+        for (const auto& segInfo : m_segmentStorage) {
+            dot start = segInfo.data->getStart();
+            dot end = segInfo.data->getEnd();
+            
+            outFile << "ID: " << segInfo.id << " ; Start: (" << start.x << ", " << start.y << ")" << " ; End: (" << end.x << ", " << end.y << ") ; Length: " << length << "\n";
+        }
+
+        outFile.close();
+        return 0;
+    }
+
+    int loadReport(const char* filename) {
+        std::ifstream inFile(filename);
+        if (!inFile.is_open()) {
+            std::cerr << "Error: cannot open report file " << filename << std::endl;
+            return -1;
+        }
+    
+        std::string line = "";
+        char currentSection;
+
+        Storage<double> params;
+
+        while (getline(inFile, line)) {
+            if (line.empty()) continue;
+            if (line == "Dots:") {
+                currentSection = 'D';
+                continue;
+            } else if (line == "Segments:") {
+                currentSection = 'S';
+                continue;
+            }
+
+            if (currentSection == 'D') {
+                ID id;
+                double x, y;
+                if (sscanf(line.data(), "ID: %d ; X: %lf ; Y: %lf", &id, &x, &y) == 3) {
+                    dot tmp{x, y};
+                    m_dotStorage.add([id, tmp]);
+                }
+            }
+            else if (currentSection== 'S') {
+                ID id;
+                double x1, y1, x2, y2;
+                if (sscanf(line.data(), "ID: %d ; Start: (%lf, %lf) ; End: (%lf, %lf)", 
+                           &id, &x1, &y1, &x2, &y2) == 5) {
+                    segment tmp{{x1, y1}, {x2, y2}};
+                    m_segmentStorage.add([id, tmp]);
+                } 
+            }
+        }
+    
+        inFile.close();
+        return 0;
     }
 
 private:
