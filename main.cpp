@@ -1,3 +1,5 @@
+#include <iostream>
+
 #include "bitmap.h"
 #include "base/base.h"
 #include "ID/idgenerator.h"
@@ -67,7 +69,7 @@ int main() {
 	<< base.getDotStorage()->findElementByID(dot1)->data->y
 	<< " "
 	<< base.getDotStorage()->findElementByID(dot2)->data->x << ", "
-	<< base.getDotStorage()->findElementByID(dot2)->data->
+	<< base.getDotStorage()->findElementByID(dot2)->data->y
 	<< std::endl;
 
 	return 0;
