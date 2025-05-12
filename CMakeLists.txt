@@ -5,6 +5,7 @@ set(CMAKE_CXX_STANDARD 20)
 
 add_executable(112EpicDrawingProject main.cpp
     drawing/bitmap.cpp
-    drawing/bitmap.h)
+    drawing/bitmap.h
+    ID/idgenerator.cpp)
 
     include_directories(ID drawing objects storage)
