@@ -1,6 +1,6 @@
 #pragma once
 
-struct  dot {
+struct dot {
 	double x;
 	double y;
 };

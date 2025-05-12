@@ -2,8 +2,10 @@
 
 #include <cassert>
 #include <cstddef>
+#include <stdexcept>
 
 #include "segment.h"
+#include "idgenerator.h"
 
 
 template<typename El>
@@ -40,22 +42,24 @@ public:
         return m_size;
     }
 
-    El& operator[](int pos) {
+    El& operator[](size_t pos) {
+
         if (pos < m_size && pos >= 0) {
             return m_storage[pos];
         }
-        throw "invalid position";
+
+        throw std::out_of_range("Index out of range");
     }
-    /*
     El* findElementByID(ID id) {
+
         for (size_t i = 0; i < m_size; ++i) {
-            if (m_storage[i].getID() == id) {
+            if (m_storage[i].id == id) {
                 return &m_storage[i];
             }
         }
+
         return nullptr;
     }
-    */
 
     class Iterator {
     public:
@@ -90,14 +94,14 @@ template<typename El>
 void sortStorage(Storage<El>& st);
 
 template<typename T>
-int searchInsertPos(const Storage<T>& arr, const T& value) {
+size_t searchInsertPos(const Storage<T>& arr, const T& value) {
 
-    int left = 0;
-    int right = arr.size() - 1;
+    size_t left = 0;
+    size_t right = arr.size() - 1;
 
     while (left <= right) {
 
-        int mid = left + (right - left) / 2;
+        size_t mid = left + (right - left) / 2;
 
         if (arr[mid] == value) {
             return mid;
