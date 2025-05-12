@@ -7,6 +7,7 @@ add_executable(112EpicDrawingProject main.cpp
     drawing/bitmap.cpp
     ID/idgenerator.cpp
     storage/storage.cpp
+        base/base.cpp
 )
 
 include_directories(ID drawing objects storage base ID objects)
