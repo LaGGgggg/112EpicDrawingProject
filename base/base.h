@@ -4,6 +4,9 @@
 #include "idgenerator.h"
 #include "storage.h"
 #include "../drawing/bitmap.h"
+#include "../drawing/IDrawing.h"
+#include "../objects/dot.h"
+#include "../objects/segment.h"
 
 
 enum ObjType {
@@ -47,9 +50,9 @@ public:
 
     Storage<dotinfo>* getDotStorage();
     Storage<seginfo>* getSegmentStorage();
-  
-   void Print (const char* filename, int hight, int weight) {
 
+   void print() const {
+	//1.
         //крайние точки изображения
         double up = 0, down = 0, left = 0, right = 0;
         double x, y;
@@ -67,7 +70,7 @@ public:
             else if (x > right) {
                 right = x;
             }
-            
+
             if (y < down) {
                 down = y;
             }
@@ -77,11 +80,11 @@ public:
         }
         // перебор отрезков
         for (int i = 0; i < m_segmentStorage.size(); ++i) {
-            
+
             //начало
             x = m_segmentStorage[i].data->getStart().x;
             y = m_segmentStorage[i].data->getStart().y;
-            
+
             if (x < left) {
                 left = x;
             }
@@ -117,20 +120,30 @@ public:
         //Вычисление размера
         double h = (up - down)+ 2;
         double w = (right - left) + 2;
-       
-        double dif_h = hight - h;
-        double dif_w = weight - w;
 
+        // double dif_h = hight - h;
+        // double dif_w = weight - w;
+
+		m_idr->setWorkingArea(0, 0, h, w);
+
+
+
+
+
+
+
+
+
+
+		/* Это перенесем в BitmapManager
         double index;
-
-
         // масштаб не изменятся
         if ((dif_h == 0 && dif_w <= 0) || (dif_w == 0 && dif_h <= 0)) {
             index = 1;
         }
         // изменение масштаба
         else {
-            
+
             if (dif_h < dif_w) {
                 index = hight / h;
             }
@@ -139,26 +152,30 @@ public:
             }
         }
 
+		BitMap bmp(static_cast<int>(hight), static_cast<int>(weight));
+		*/
 
-        BitMap bmp(static_cast<int>(hight), static_cast<int>(weight));
-
-
-        int x_1, y_1, x_2, y_2;
         //отрисовка точек
         for (int i = 0; i < m_dotStorage.size(); ++i) {
-
-
+			m_idr->drawPoint(m_dotStorage[i].data->x,m_dotStorage[i].data->y);
+			/*
+			Это перенесем в BitmapManager
             x_1 = static_cast<int>(((m_dotStorage[i].data->x) - left + 1) * index);
             y_1 = static_cast<int>(((m_dotStorage[i].data->y) - down + 1) * index);
 
             bmp.setPixel(x_1, y_1);
-           
+           */
         }
         //отрисовка отрезков
         for (int i = 0; i < m_segmentStorage.size(); ++i) {
+			m_idr->drawSegment(m_segmentStorage[i].data->getStart().x,
+							   m_segmentStorage[i].data->getStart().y,
+							   m_segmentStorage[i].data->getEnd().x,
+							   m_segmentStorage[i].data->getEnd().y);
+            /*Это перенесем в BitmapManager
 
-            //начало
-            int tmp = (m_segmentStorage[i].data->getStart().x);
+
+			int tmp = (m_segmentStorage[i].data->getStart().x);
 
             x_1 = static_cast<int>(((m_segmentStorage[i].data->getStart().x) - left + 1) * index);
             y_1 = static_cast<int>(((m_segmentStorage[i].data->getStart().y) - down + 1) * index);
@@ -167,12 +184,12 @@ public:
             y_2 = static_cast<int>(((m_segmentStorage[i].data->getEnd().y) - down + 1) * index);
 
             bmp.drawSegment(x_1, y_1, x_2, y_2);
-            
+            */
         }
 
-        bmp.saveTo(filename);
+        //bmp.saveTo(filename);
     }
-
+	void setDrawing(IDrawing *idr) { m_idr = idr; }
 private:
 
     class relativePositionInfo {
@@ -189,4 +206,6 @@ private:
     Storage<seginfo> m_segmentStorage;
 
     Storage<relativePositionInfo> m_relativePositionInfoStorage;
+
+	mutable IDrawing* m_idr;
 };
