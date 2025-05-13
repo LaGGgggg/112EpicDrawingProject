@@ -5,15 +5,13 @@ class BitMap {
 private:
     uint32_t rows_; // количество строк
     uint32_t cols_; // длина строки
-
     uint32_t line_; // длина строки в байтах, с учетом выравнивания
     size_t size_;
-
     uint8_t* pixel_matrix_;
-
     bool isBlack_; // - цвет фона
 
-    // заголовки BitMap файла
+
+// заголовки BitMap файла
 #pragma pack(push, 1) // Чтобы данные записывались вплотую
     struct bmp_header {
         uint16_t Type{ 0x4D42 }; 
@@ -42,8 +40,11 @@ private:
     };
 #pragma pack(pop)
 
-public:
 
+
+
+public:
+    // params: hight, weight, color
     BitMap(uint32_t rows, uint32_t cols, bool isBlack = false) : rows_(rows), cols_(cols), isBlack_(isBlack) {
 
         const uint32_t tmp_ = (cols_ % 32 == 0) ? 0 : 1;
@@ -69,7 +70,7 @@ public:
 
     int saveTo(const char* filename);
     int loadFrom(const char* filename);
-    void setPixel(uint32_t r, uint32_t c, bool isBlack);
+    void setPixel(uint32_t r, uint32_t c, bool isBlack = true);
     bool isBlack(uint32_t r, uint32_t c);
-    void drawSegment(uint32_t x1, uint32_t y1, uint32_t x2, uint32_t y2, bool isBlack);
+    void drawSegment(uint32_t x1, uint32_t y1, uint32_t x2, uint32_t y2, bool isBlack = true);
 };

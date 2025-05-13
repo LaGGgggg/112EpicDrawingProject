@@ -5,6 +5,7 @@ set(CMAKE_CXX_STANDARD 20)
 
 add_executable(112EpicDrawingProject main.cpp
     drawing/bitmap.cpp
+    drawing/bitmap.h
     ID/idgenerator.cpp
     storage/storage.cpp
         base/base.cpp
