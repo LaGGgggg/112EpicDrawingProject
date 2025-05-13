@@ -53,7 +53,15 @@ public:
 
     El& operator[](size_t pos) {
 
-        if (pos < m_size && pos >= 0) {
+        if (pos < m_size) {
+            return m_storage[pos];
+        }
+
+        throw std::out_of_range("Index out of range");
+    }
+    const El& operator[](size_t pos) const {
+
+        if (pos < m_size) {
             return m_storage[pos];
         }
 
