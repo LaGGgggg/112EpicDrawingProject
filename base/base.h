@@ -1,9 +1,8 @@
 #pragma once
 
 #include <iostream>
-
-#include "../ID/idgenerator.h"
-#include "../storage/storage.h"
+#include "idgenerator.h"
+#include "storage.h"
 #include "../drawing/bitmap.h"
 
 
@@ -27,83 +26,29 @@ enum SRPResult {
 
 class Base {
 public:
-    ID addObject(ObjType otype) {
-        switch (otype) {
-        case OBJ_DOT:
-            m_dotStorage.add({ generateID(), new dot()});
-            return m_dotStorage[m_dotStorage.size() - 1].id;
-            break;
-        case OBJ_SEG:
-            m_segmentStorage.add({ generateID(), new segment(new dot(), new dot())});
-            return m_segmentStorage[m_segmentStorage.size() - 1].id;
-            break;
-        default:
-            std::cerr << "Invalid object type" << std::endl;
-        }
+
+    struct dotinfo {
+        ID id;
+        dot* data;
     };
-    void removeObject(int id) {
-		for (size_t k = 0; k < m_dotStorage.size(); ++k) {
-			if (m_dotStorage[k].id == id) {
-				delete m_dotStorage[k].data;
-				m_dotStorage.remove(k);
-				return;
-			}
-		}
-		for (size_t k = 0; k < m_segmentStorage.size(); ++k) {
-			if (m_segmentStorage[k].id == id) {
-				delete m_segmentStorage[k].data;
-				m_segmentStorage.remove(k);
-				return;
-			}
-		}
-    }
 
-    SRPResult setRelativePos(Storage<ID>& objects, RelativePosType rpt) {
-        // Проверка на корректность пожеланий пользователя
+    struct seginfo {
+        ID id;
+        segment* data;
+    };
 
-        const double errorThreshold = 1e-6;
+    ID addObject(ObjType otype);
+    void removeObject(size_t id);
 
-        while (getError(objects, rpt) > errorThreshold)  /* Условие необходимости продолжения процедуры поиска значений параметров*/ {
-
-            // Выбираем как изменить параметры объектов 
-            // (для этого надо уметь вычислять частные производные 
-            // от величины ошибки)
-
-            // Меняем параметры 
-            // (для этого надо реализовать методы, 
-            // модифицирующие положение точек и отрезков)
-            // Оцениваем как изменилась ситуации с точки зрения 
-            // выполнения пожеланий пользователя
-        }
-    }
-
+    SRPResult setRelativePos(Storage<ID>& objects, RelativePosType rpt);
     double getError(Storage<ID>& objects, RelativePosType rpt);
+    int getObjChildren(ID id, Storage<ID>& childIds);
+    int getObjParams(ID id, Storage<double>& params);
 
-    int getObjChildren(ID id, Storage<ID>& childIds) {
-
-    }
-
-    int getObjParams(ID id, Storage<double>& params) {
-        for (size_t k = 0; k < m_dotStorage.size(); ++k) {
-            if (m_dotStorage[k].id == id) {
-                params.add(m_dotStorage[k].data->x);
-                params.add(m_dotStorage[k].data->y);
-                return 0;
-            }
-        }
-
-        for (size_t k = 0; k < m_segmentStorage.size(); ++k) {
-            if (m_segmentStorage[k].id == id) {
-                params.add(m_segmentStorage[k].data->getStart().x);
-                params.add(m_segmentStorage[k].data->getStart().y);
-                params.add(m_segmentStorage[k].data->getEnd().x);
-                params.add(m_segmentStorage[k].data->getEnd().y);
-            }
-        }
-        return -1;
-    }
-
-    void Print (const char* filename, int hight, int weight) {
+    Storage<dotinfo>* getDotStorage();
+    Storage<seginfo>* getSegmentStorage();
+  
+   void Print (const char* filename, int hight, int weight) {
 
         //крайние точки изображения
         double up = 0, down = 0, left = 0, right = 0;
@@ -227,21 +172,21 @@ public:
 
         bmp.saveTo(filename);
     }
-        
 
 private:
-    struct dotinfo {
-        ID id;
-        dot* data;
-    };
 
-    struct seginfo {
-        ID id;
-        segment* data;
+    class relativePositionInfo {
+    public:
+
+        Storage<ID>* ids_storage;
+        RelativePosType type;
+
+        relativePositionInfo(Storage<ID>* ids_storage, const RelativePosType t) : ids_storage(ids_storage), type(t) {}
+        relativePositionInfo() : ids_storage(nullptr), type(ORTHO_SEGMENTS) {}
     };
 
     Storage<dotinfo> m_dotStorage;
     Storage<seginfo> m_segmentStorage;
+
+    Storage<relativePositionInfo> m_relativePositionInfoStorage;
 };
-
-

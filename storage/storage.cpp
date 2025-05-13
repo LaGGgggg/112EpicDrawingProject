@@ -1,13 +1,13 @@
-#include "storage.h"
 #include <cmath>
 
+#include "storage.h"
 
 
 template<typename El>
 void sortStorage(Storage<El>& st) {
     size_t n = st.size();
-    size_t stack1 = new size_t[log(n) + 1](0);
-    size_t stack2 = new size_t[log(n) + 1](0);
+    auto* stack1 = new size_t[log(n) + 1]();
+    auto* stack2 = new size_t[log(n) + 1]();
     size_t sz_stack = 1;
     stack1[0] = 0;
     stack2[0] = n - 1;
@@ -17,7 +17,6 @@ void sortStorage(Storage<El>& st) {
         size_t from = stack1[sz_stack - 1];
         size_t to = stack2[sz_stack - 1];
         --sz_stack;
-
 
         size_t left = from;
         size_t right = to;
@@ -38,10 +37,10 @@ void sortStorage(Storage<El>& st) {
                 }
             }
         }
-        // Сначала на стек поместить больший диапазон
-        // потом меньший диапазон
+        // пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
+        // пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
         if (right - from < to - left) {
-            // Справа больше, чем слева
+            // пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ, пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ
             if (left < to) {
                 stack1[sz_stack] = left;
                 stack2[sz_stack] = to;
@@ -66,4 +65,7 @@ void sortStorage(Storage<El>& st) {
             }
         }
     }
+
+    delete[] stack1;
+    delete[] stack2;
 }

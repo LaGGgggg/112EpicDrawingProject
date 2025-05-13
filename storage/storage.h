@@ -1,18 +1,26 @@
-#ifndef STORAGE_H
-#define STORAGE_H
+#pragma once
 
-#include "../objects/dot.h"
-#include "../objects/segment.h"
 #include <cassert>
 #include <cstddef>
+#include <stdexcept>
+
 
 template<typename El>
-
-
-
 class Storage {
 public:
     Storage() : m_storage(nullptr), m_size(0) {}
+	Storage(const Storage<El>& s) : m_size(s.m_size) {
+		m_storage = new El[m_size];
+		for (size_t k = 0; k < m_size; ++k)
+			m_storage[k] = s.m_storage[k];
+	}
+	void operator=(const Storage<El>& s) {
+		delete[] m_storage;
+		m_size = s.m_size;
+		m_storage = new El[m_size];
+		for (size_t k = 0; k < m_size; ++k)
+			m_storage[k] = s.m_storage[k];
+	}
 
     void add(const El& d) {
         El* newStorage = new El[m_size + 1];
@@ -24,7 +32,7 @@ public:
         m_storage = newStorage;
         ++m_size;
     }
-    void remove(size_t num) {
+    void remove(const size_t num) {
         assert(num < m_size);
 
         El* newStorage = new El[m_size - 1];
@@ -39,26 +47,28 @@ public:
         --m_size;
     }
 
-    size_t size() const {
+    [[nodiscard]] size_t size() const {
         return m_size;
     }
 
-    El& operator[](int pos) {
+    El& operator[](size_t pos) {
+
         if (pos < m_size && pos >= 0) {
             return m_storage[pos];
         }
-        throw "invalid position";
+
+        throw std::out_of_range("Index out of range");
     }
-    /*
     El* findElementByID(ID id) {
+
         for (size_t i = 0; i < m_size; ++i) {
-            if (m_storage[i].getID() == id) {
+            if (m_storage[i].id == id) {
                 return &m_storage[i];
             }
         }
+
         return nullptr;
     }
-    */
 
     class Iterator {
     public:
@@ -73,7 +83,7 @@ public:
             return tmp;
         }
         bool operator==(const Iterator& other) const { return ptr == other.ptr; }
-
+		bool operator!=(const Iterator& other) const { return !(ptr == other.ptr); }
     private:
         El* ptr;
     };
@@ -93,14 +103,14 @@ template<typename El>
 void sortStorage(Storage<El>& st);
 
 template<typename T>
-int searchInsertPos(const Storage<T>& arr, const T& value) {
+size_t searchInsertPos(const Storage<T>& arr, const T& value) {
 
-    int left = 0;
-    int right = arr.size() - 1;
+    size_t left = 0;
+    size_t right = arr.size() - 1;
 
     while (left <= right) {
 
-        int mid = left + (right - left) / 2;
+        size_t mid = left + (right - left) / 2;
 
         if (arr[mid] == value) {
             return mid;
@@ -113,5 +123,3 @@ int searchInsertPos(const Storage<T>& arr, const T& value) {
 
     return -1;
 }
-
-#endif // STORAGE_H
