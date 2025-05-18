@@ -3,8 +3,8 @@
 #include <iostream>
 #include <cmath>
 
-#include "idgenerator.h"
-#include "storage.h"
+#include "../ID/idgenerator.h"
+#include "../storage/storage.h"
 
 
 enum ObjType {

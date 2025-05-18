@@ -3,7 +3,7 @@
 #include <cassert>
 #include <cstddef>
 
-#include "segment.h"
+#include "../objects/segment.h"
 
 
 template<typename El>

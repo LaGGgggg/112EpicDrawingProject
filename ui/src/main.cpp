@@ -1,6 +1,7 @@
 #include <iostream>
 #include <string>
 #include <memory>
+#include "../../base/base.h"
 
 #include <SFML/Graphics.hpp>
 
@@ -62,6 +63,11 @@ public:
             );
     }
 
+    void addSegment(double x1, double y1, double x2, double y2){
+        segment seg{{x1,y1}, {x2,y2}};
+        segStore.add(seg);
+    }
+
     void handleEvent(const sf::Event& event, sf::RenderWindow& window) { // Обработка событий
         if ( const auto* mouseButtonPressed = event.getIf<sf::Event::MouseButtonPressed>() ){
             if (mouseButtonPressed->button == sf::Mouse::Button::Left){
@@ -96,8 +102,8 @@ public:
 
         m_target->draw(shape);
     }
-
 private:
+    Storage<segment> segStore;
     void draw(sf::RenderTarget& target, sf::RenderStates states) const override { // Отрисовка калькулятора
         states.transform *= getTransform();
         target.draw(*m_button, states);
@@ -125,7 +131,7 @@ int main()
     window.setFramerateLimit(144);
 
     auto font = std::make_unique<sf::Font>(); // Загружаем шрифт
-    if (!font->openFromFile("DejaVuSans.ttf")) {
+    if (!font->openFromFile("calibri.ttf")) {
         std::cerr << "Не удалось загрузить шрифт!\n";
         return -1;
     }
