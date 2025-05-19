@@ -64,9 +64,12 @@ public:
     }
 
     void addSegment(double x1, double y1, double x2, double y2){
-        segment seg{{x1,y1}, {x2,y2}};
-        segStore.add(seg);
+        dot* p1 = new dot{x1, y1};
+        dot* p2 = new dot{x2, y2};
+        segment seg(p1, p2);
+        segStorage.add(seg);
     }
+
 
     void handleEvent(const sf::Event& event, sf::RenderWindow& window) { // Обработка событий
         if ( const auto* mouseButtonPressed = event.getIf<sf::Event::MouseButtonPressed>() ){
@@ -80,6 +83,10 @@ public:
         if (const auto* mouseButtonReleased = event.getIf<sf::Event::MouseButtonReleased>() ){
             if ( mouseButtonReleased->button == sf::Mouse::Button::Left) {
                 m_button->releaseEffect();
+                if (m_button->getGlobalBounds().contains(
+                        static_cast<sf::Vector2f>(mouseButtonReleased->position))) {
+                        addSegment(100.0 + segStorage.size() * 20.0, 100.0 + segStorage.size() * 20.0, 200.0 + segStorage.size() * 20.0, 150.0 + segStorage.size() * 20.0);
+                }
             }
         }
     }
@@ -103,7 +110,7 @@ public:
         m_target->draw(shape);
     }
 private:
-    Storage<segment> segStore;
+    Storage<segment> segStorage;
     void draw(sf::RenderTarget& target, sf::RenderStates states) const override { // Отрисовка калькулятора
         states.transform *= getTransform();
         target.draw(*m_button, states);
