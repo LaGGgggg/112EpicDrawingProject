@@ -73,4 +73,11 @@ public:
     void setPixel(uint32_t r, uint32_t c, bool isBlack = true);
     bool isBlack(uint32_t r, uint32_t c);
     void drawSegment(uint32_t x1, uint32_t y1, uint32_t x2, uint32_t y2, bool isBlack = true);
+
+    int height() {
+        return rows_;
+    }
+    int width() {
+        return cols_;
+    }
 };

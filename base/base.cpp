@@ -5,6 +5,8 @@
 #include "idgenerator.h"
 #include "storage.h"
 
+conts int OFFSET = 10;
+
 
 ID Base::addObject(const ObjType otype) {
     switch (otype) {
@@ -36,6 +38,247 @@ void Base::removeObject(const size_t id) {
         }
     }
 }
+
+void Base::print()const {
+   
+    //крайние точки изображения
+    double up = 0, down = 0, left = 0, right = 0;
+    double x, y;
+
+
+    // перебор точек
+    for (int i = 0; i < m_dotStorage.size(); ++i) {
+
+        x = m_dotStorage[i].data->x;
+        y = m_dotStorage[i].data->y;
+
+        if (x < left) {
+            left = x;
+        }
+        else if (x > right) {
+            right = x;
+        }
+
+        if (y < down) {
+            down = y;
+        }
+        else if (y > up) {
+            up = y;
+        }
+    }
+    // перебор отрезков
+    for (int i = 0; i < m_segmentStorage.size(); ++i) {
+
+        //начало
+        x = m_segmentStorage[i].data->getStart().x;
+        y = m_segmentStorage[i].data->getStart().y;
+
+        if (x < left) {
+            left = x;
+        }
+        else if (x > right) {
+            right = x;
+        }
+        if (y < down) {
+            down = y;
+        }
+        else if (y > up) {
+            up = y;
+        }
+
+        //конец
+        x = m_segmentStorage[i].data->getEnd().x;
+        y = m_segmentStorage[i].data->getEnd().y;
+
+        if (x < left) {
+            left = x;
+        }
+        else if (x > right) {
+            right = x;
+        }
+        if (y < down) {
+            down = y;
+        }
+        else if (y > up) {
+            up = y;
+        }
+    }
+
+
+    //Вычисление размера
+    double h = (up - down) + OFFSET;
+    double w = (right - left) + OFFSET;
+
+
+    // Задание необходимого размера
+    m_idr->setWorkingArea(left, down, w, h);
+
+
+    //отрисовка точек
+    for (int i = 0; i < m_dotStorage.size(); ++i) {
+        m_idr->drawPoint(m_dotStorage[i].data->x, m_dotStorage[i].data->y);
+               
+    }
+    //отрисовка отрезков
+    for (int i = 0; i < m_segmentStorage.size(); ++i) {
+            m_idr->drawSegment(m_segmentStorage[i].data->getStart().x,
+                               m_segmentStorage[i].data->getStart().y,
+                               m_segmentStorage[i].data->getEnd().x,
+                               m_segmentStorage[i].data->getEnd().y);
+        
+    }
+
+}
+void setDrawing(IDrawing* idr) {
+    m_idr = idr;
+}
+
+private:
+
+    class relativePositionInfo {
+    public:
+
+        Storage<ID>* ids_storage;
+        RelativePosType type;
+
+        relativePositionInfo(Storage<ID>* ids_storage, const RelativePosType t) : ids_storage(ids_storage), type(t) {}
+        relativePositionInfo() : ids_storage(nullptr), type(ORTHO_SEGMENTS) {}
+    };
+
+    Storage<dotinfo> m_dotStorage;
+    Storage<seginfo> m_segmentStorage;
+
+    Storage<relativePositionInfo> m_relativePositionInfoStorage;
+
+    mutable IDrawing* m_idr;
+
+};
+
+/*
+void Base::Print(const char* filename, int hight, int weight) {
+
+    //крайние точки изображения
+    double up = 0, down = 0, left = 0, right = 0;
+    double x, y;
+
+
+    // перебор точек
+    for (int i = 0; i < m_dotStorage.size(); ++i) {
+
+        x = m_dotStorage[i].data->x;
+        y = m_dotStorage[i].data->y;
+
+        if (x < left) {
+            left = x;
+        }
+        else if (x > right) {
+            right = x;
+        }
+
+        if (y < down) {
+            down = y;
+        }
+        else if (y > up) {
+            up = y;
+        }
+    }
+    // перебор отрезков
+    for (int i = 0; i < m_segmentStorage.size(); ++i) {
+
+        //начало
+        x = m_segmentStorage[i].data->getStart().x;
+        y = m_segmentStorage[i].data->getStart().y;
+
+        if (x < left) {
+            left = x;
+        }
+        else if (x > right) {
+            right = x;
+        }
+        if (y < down) {
+            down = y;
+        }
+        else if (y > up) {
+            up = y;
+        }
+
+        //конец
+        x = m_segmentStorage[i].data->getEnd().x;
+        y = m_segmentStorage[i].data->getEnd().y;
+
+        if (x < left) {
+            left = x;
+        }
+        else if (x > right) {
+            right = x;
+        }
+        if (y < down) {
+            down = y;
+        }
+        else if (y > up) {
+            up = y;
+        }
+    }
+
+
+    //Вычисление размера рабочей области
+    double h = (up - down) + 2;
+    double w = (right - left) + 2;
+
+    double dif_h = hight - h; // по вертикалии
+    double dif_w = weight - w; // по горизонталии
+
+    double index;
+
+
+    // масштаб не изменятся
+    if ((dif_h == 0 && dif_w <= 0) || (dif_w == 0 && dif_h <= 0)) {
+        index = 1;
+    }
+    // изменение масштаба
+    else {
+
+        if (dif_h < dif_w) {
+            index = hight / h;
+        }
+        else {
+            index = weight / w;
+        }
+    }
+
+
+    BitMap bmp(static_cast<int>(hight), static_cast<int>(weight));
+
+
+    int x_1, y_1, x_2, y_2;
+    //отрисовка точек
+    for (int i = 0; i < m_dotStorage.size(); ++i) {
+
+
+        x_1 = static_cast<int>(((m_dotStorage[i].data->x) - left + 1) * index);
+        y_1 = static_cast<int>(((m_dotStorage[i].data->y) - down + 1) * index);
+
+        bmp.setPixel(x_1, y_1);
+
+    }
+    //отрисовка отрезков
+    for (int i = 0; i < m_segmentStorage.size(); ++i) {
+
+        //начало
+        int tmp = (m_segmentStorage[i].data->getStart().x);
+
+        x_1 = static_cast<int>(((m_segmentStorage[i].data->getStart().x) - left + 1) * index);
+        y_1 = static_cast<int>(((m_segmentStorage[i].data->getStart().y) - down + 1) * index);
+        //конец
+        x_2 = static_cast<int>(((m_segmentStorage[i].data->getEnd().x) - left + 1) * index);
+        y_2 = static_cast<int>(((m_segmentStorage[i].data->getEnd().y) - down + 1) * index);
+
+        bmp.drawSegment(x_1, y_1, x_2, y_2);
+
+    }
+
+    bmp.saveTo(filename);
+}*/
 
 SRPResult Base::setRelativePos(Storage<ID>& objects, RelativePosType rpt) {
 
