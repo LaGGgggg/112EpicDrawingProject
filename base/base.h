@@ -118,13 +118,13 @@ public:
 
 
         //Вычисление размера
-        double h = (up - down)+ 2;
-        double w = (right - left) + 2;
+        double h = (up - down) + 20;
+        double w = (right - left) + 20;
 
         // double dif_h = hight - h;
         // double dif_w = weight - w;
 
-		m_idr->setWorkingArea(0, 0, h, w);
+		m_idr->setWorkingArea(-10, -10, h, w);
 
 
 
