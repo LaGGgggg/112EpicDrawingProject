@@ -15,7 +15,7 @@ public:
 		return *m_start;
 	}
 	[[nodiscard]] dot& getEnd() const {
-		assert(m_start);
+		assert(m_end);
 		return *m_end;
 	}
 

@@ -4,6 +4,8 @@
 #include <cstddef>
 #include <stdexcept>
 
+#include "idgenerator.h"
+
 
 template<typename El>
 class Storage {

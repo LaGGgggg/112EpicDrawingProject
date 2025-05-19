@@ -1,9 +1,10 @@
 #pragma once
 
-#include <iostream>
 #include "idgenerator.h"
 #include "storage.h"
 #include "../drawing/bitmap.h"
+#include "dot.h"
+#include "segment.h"
 
 
 enum ObjType {
@@ -15,6 +16,7 @@ enum RelativePosType {
     COINSIDENT_DOTS,
     EQUAL_LENGTH_SEGMENTS, // Отрезки должны быть одинаковы по длине
     ORTHO_SEGMENTS, // Отрезки должны быть ортогональны
+    MERGED_SEGMENTS, // Отрезки должны быть совмещены в ломаную линию
 };
 
 enum SRPResult {
@@ -48,7 +50,7 @@ public:
     Storage<dotinfo>* getDotStorage();
     Storage<seginfo>* getSegmentStorage();
   
-   void Print (const char* filename, int hight, int weight) {
+   void Print(const char* filename, int hight, int weight) {
 
         //крайние точки изображения
         double up = 0, down = 0, left = 0, right = 0;

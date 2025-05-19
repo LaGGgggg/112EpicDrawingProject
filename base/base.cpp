@@ -174,6 +174,28 @@ double Base::getError(Storage<ID>& objects, const RelativePosType rpt) {
 
             return std::abs(length1 - length2); // Error is the absolute difference in lengths
         }
+        case MERGED_SEGMENTS: {
+
+            if (objects.size() < 2) {
+                std::cerr << "Error: Not enough objects for MERGED_SEGMENTS" << std::endl;
+                return -1.0;
+            }
+
+            double totalError = 0.0;
+
+            for (size_t i = 0; i < objects.size() - 1; ++i) {
+
+                const segment* seg1 = m_segmentStorage.findElementByID(objects[i])->data;
+                const segment* seg2 = m_segmentStorage.findElementByID(objects[i + 1])->data;
+
+                const double dx = seg1->getEnd().x - seg2->getStart().x;
+                const double dy = seg1->getEnd().y - seg2->getStart().y;
+
+                totalError += std::sqrt(dx * dx + dy * dy);
+            }
+
+            return totalError;
+        }
         case COINSIDENT_DOTS: {
 
             if (objects.size() < 2) {
