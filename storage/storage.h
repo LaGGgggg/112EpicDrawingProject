@@ -3,6 +3,7 @@
 #include <cassert>
 #include <cstddef>
 #include <stdexcept>
+#include "idgenerator.h"
 
 #include "idgenerator.h"
 

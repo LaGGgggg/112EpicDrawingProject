@@ -5,7 +5,7 @@
 #include <SFML/Graphics.hpp>
 
 #include "IDrawing.h"
-#include "Base.h"
+#include "base.h"
 
 
 class Button final : public sf::Drawable, public sf::Transformable {
