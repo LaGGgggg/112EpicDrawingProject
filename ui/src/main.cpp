@@ -4,14 +4,14 @@
 
 #include <SFML/Graphics.hpp>
 
-class Button : public sf::Drawable, public sf::Transformable {
 #include "IDrawing.h"
 #include "Base.h"
 
 
+class Button final : public sf::Drawable, public sf::Transformable {
 public:
-    Button(std::string text, sf::Font& font, unsigned int characterSize,
-           sf::Vector2f position, sf::Vector2f size)
+    Button(const std::string& text, sf::Font& font, unsigned int characterSize,
+           const sf::Vector2f position, sf::Vector2f size)
         : m_rect{std::make_unique<sf::RectangleShape>(size)}, // Создаем прямоугольник кнопки
         m_text{std::make_unique<sf::Text>(font, text, characterSize)} { // Создаем текст на кнопке
 
@@ -99,9 +99,8 @@ public:
                 sf::Vertex{sf::Vector2f(static_cast<float>(x2), static_cast<float>(y2))}
             };
         m_target->draw(line.data(), line.size(), sf::PrimitiveType::Lines);
-
     }
-    void drawPoint(double x,double y)const{
+    void drawPoint(const double x, const double y) override {
         sf::CircleShape shape(3.f);
         shape.setPosition(sf::Vector2f(static_cast<float>(x), static_cast<float>(y)));
         shape.setFillColor(sf::Color(150, 50, 250));
@@ -130,7 +129,7 @@ int main()
     auto window = sf::RenderWindow(sf::VideoMode({1920u, 1080u}), "CMake SFML Project");
     window.setFramerateLimit(144);
 
-    auto font = std::make_unique<sf::Font>(); // Загружаем шрифт
+    const auto font = std::make_unique<sf::Font>(); // Загружаем шрифт
     if (!font->openFromFile("DejaVuSans.ttf")) {
         std::cerr << "Не удалось загрузить шрифт!\n";
         return -1;
