@@ -46,6 +46,25 @@ public:
         m_storage = newStorage;
         --m_size;
     }
+    void insertAt(const size_t pos, const El& value) {
+
+        if (pos > m_size) {
+            throw std::out_of_range("Position out of range");
+        }
+
+        El* newStorage = new El[m_size + 1];
+        for (size_t k = 0; k < pos; ++k) {
+            newStorage[k] = m_storage[k];
+        }
+        newStorage[pos] = value;
+        for (size_t k = pos; k < m_size; ++k) {
+            newStorage[k + 1] = m_storage[k];
+        }
+
+        delete[] m_storage;
+        m_storage = newStorage;
+        ++m_size;
+    }
 
     [[nodiscard]] size_t size() const {
         return m_size;
