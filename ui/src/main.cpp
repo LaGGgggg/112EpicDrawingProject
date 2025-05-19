@@ -5,6 +5,10 @@
 #include <SFML/Graphics.hpp>
 
 class Button : public sf::Drawable, public sf::Transformable {
+#include "IDrawing.h"
+#include "Base.h"
+
+
 public:
     Button(std::string text, sf::Font& font, unsigned int characterSize,
            sf::Vector2f position, sf::Vector2f size)
@@ -49,17 +53,21 @@ private:
     std::unique_ptr<sf::Text> m_text;
 };
 
-class UI: public sf::Drawable, public sf::Transformable {
+class UI: public sf::Drawable, public sf::Transformable, public IDrawing {
 public:
-    explicit UI(sf::Font& font) {
-        const int fontSize = 16;
+
+    Base* base;
+
+    explicit UI(sf::Font& font, Base* base_) {
+        constexpr int fontSize = 16;
         m_button = std::make_unique<Button>(
             "Segment",
             font,
             fontSize,
             sf::Vector2f(20, 20),
             sf::Vector2f(80, 20)
-            );
+        );
+        base = base_;
     }
 
     void handleEvent(const sf::Event& event, sf::RenderWindow& window) { // Обработка событий
@@ -77,8 +85,15 @@ public:
             }
         }
     }
-    void drawSegment(double x1,double y1,double x2,double y2)const{
-        std::array line =
+    void setWorkingArea(const double blx, const double bly, const double width, const double height) override {
+        sf::View view(sf::FloatRect(
+            sf::Vector2<float>(static_cast<float>(blx), static_cast<float>(bly)),
+            sf::Vector2<float>(static_cast<float>(width), static_cast<float>(height))
+        ));
+        m_target->setView(view);
+    }
+    void drawSegment(const double x1, const double y1, const double x2, const double y2) override {
+        const std::array line =
             {
                 sf::Vertex{sf::Vector2f(static_cast<float>(x1), static_cast<float>(y1))},
                 sf::Vertex{sf::Vector2f(static_cast<float>(x2), static_cast<float>(y2))}
@@ -102,21 +117,12 @@ private:
         states.transform *= getTransform();
         target.draw(*m_button, states);
         m_target = &target;
-
-        drawSegment(100.0,100.0,200.0,150.0);
-        drawPoint(100.0,100.0);
-        drawPoint(200.0,150.0);
+        base->print();
     }
     std::unique_ptr<Button> m_button;
 
-
-
     mutable sf::RenderTarget* m_target;
 };
-
-
-
-
 
 
 int main()
@@ -130,7 +136,28 @@ int main()
         return -1;
     }
 
-    UI ui(*font); // Создаем UI
+    Base base{};
+
+    ID seg1 = base.addObject(OBJ_SEG);
+    ID seg2 = base.addObject(OBJ_SEG);
+    ID dot1 = base.addObject(OBJ_DOT);
+    ID dot2 = base.addObject(OBJ_DOT);
+
+    dot dot1Object = {25, 200};
+    dot dot2Object = {25, 100};
+    dot dot3Object = {200, 0};
+    dot dot4Object = {44, 28};
+
+    base.getSegmentStorage()->findElementByID(seg1)->data->updateStart(&dot1Object);
+    base.getSegmentStorage()->findElementByID(seg1)->data->updateEnd(&dot2Object);
+
+    base.getSegmentStorage()->findElementByID(seg2)->data->updateStart(&dot3Object);
+    base.getSegmentStorage()->findElementByID(seg2)->data->updateEnd(&dot4Object);
+
+    base.getDotStorage()->findElementByID(dot2)->data->x = 200;
+
+    UI ui(*font, &base); // Создаем UI
+    base.setDrawing(&ui);
 
     while (window.isOpen()) { // Главный цикл
 
